@@ -1,0 +1,132 @@
+.THIS {
+    margin-bottom: 5rem;
+}
+.THIS .warrning {
+    background-color: #b7bd42;
+}
+.THIS .pointerNone{
+    pointer-events: none;
+}
+.THIS .openBox {
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.40);
+    margin-top: 1rem;
+}
+.THIS .quoteTempConfig{
+    height : auto;
+    margin: 0 2px;
+    position: relative;
+    background-color: #fff;
+    /* box-shadow : 0 2px 4px 0 rgba(0, 0, 0, 0.40); */
+}
+.THIS .highlightBox{
+    box-shadow: 0px 0px 6px 1px #2b2b5a !important;
+}
+.THIS .fullWidth {
+    width: 100%;
+}
+.THIS .errorBorder {
+    border: solid 1px red;
+    box-shadow: 0 0 6px 1px #2b2b5a!important;
+}
+.THIS .inlineDisplay {
+    display: inline-flex;
+}
+.THIS .borderRight {
+    border-right: 1px solid #ddd;
+}
+.THIS .font18 {
+    font-size:18px;
+}
+.THIS .pointer {
+    cursor: pointer;
+}
+.THIS .quoteTempConfig .templateConfigSpinner {
+    position: absolute;
+}
+.THIS .quoteTempConfig .column-Item-design{
+    padding: 7px 14px;
+    min-height: 48px;
+}
+.THIS .quoteTempConfig .row-margin {
+    margin-top: 10px;
+}
+.THIS .quoteTempConfig .seprator2 {
+    margin: 4px;
+}
+.THIS .quoteTempConfig .top-margin {
+    margin-top: 21px;
+}
+.THIS .quoteTempConfig .flex-display {
+    display:flex;
+}
+.THIS .quoteTempConfig .newIcon svg {
+    fill: token(addIconColor) !important;
+}
+.THIS .quoteTempConfig .banIcon svg {
+    fill: token(removeIconColor) !important;
+}
+.THIS .quoteTempConfig .headerRuler {
+    margin: 0;
+}
+.THIS .quoteTempConfig .seprator {
+    margin: 0;
+}
+.THIS .quoteTempConfig .txtLabel {
+    padding: 2px 0 0 10px;
+}
+.THIS .quoteTempConfig .txtLabel2 {
+    padding: 5px 0 0 10px;
+}
+.THIS .quoteTempConfig .headerSection {
+    padding: 12px;
+}
+.THIS .quoteTempConfig .headerText {
+    font-size: 16px;
+    padding: 4px;
+}
+.THIS .quoteTempConfig .fieldComboBox .slds-dropdown {
+    min-width: 200px;
+}
+.THIS .quoteTempConfig .hide-error-message > .slds-form-element__help {
+    display: none;
+}
+.THIS .quoteTempConfig .fieldSelectbox option:disabled {
+    color: #bbb;
+}
+.THIS .quoteTempConfig .numberInputDesign {
+    width : 76px;
+}
+.THIS .quoteTempConfig .toggleBtn .slds-checkbox_on {
+    display: none !important;
+}
+.THIS .quoteTempConfig .toggleBtn .slds-checkbox_off {
+    display: none !important;
+}
+.THIS .quoteTempConfig .clsFieldset {    
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-top: 0.35em;
+    padding-bottom: 0.625em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    border: 2px groove;
+    display: block;    
+}
+.THIS .quoteTempConfig .clsLegend {    
+    padding-left: 2px;
+    padding-right: 2px;
+    border: none;
+    display: block;
+}
+.THIS .sectionHeaderBackground {
+    background-color: lightgrey;
+}
+.THIS .sectionHeaderErrorBackground {
+    background-color: antiqueWhite;
+}
+.THIS .boxBorder {
+    border: 1px solid black;
+}
+.THIS .boxBorderError {
+    border: 1px solid red;
+}

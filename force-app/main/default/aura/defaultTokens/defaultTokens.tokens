@@ -1,0 +1,34 @@
+<aura:tokens extends="force:base">
+    <aura:token name="lineHeightHeading" value="{!lineHeightHeading}"/>
+    <aura:token name="borderWidthThin" value="{!borderWidthThin}"/>
+    <aura:token name="spacingXxxSmall" value="{!spacingXxxSmall}"/>
+    <aura:token name="spacingXxSmall" value="{!spacingXxSmall}"/>
+    <aura:token name="sizeXxSm" value="{!lineHeightText}"/>
+    <aura:token name="customFontSize" value="{!borderWidthThick}"/>
+
+    <aura:token name="varSpacingXxSm" value="{!varSpacingXxSmall}"/>
+    <aura:token name="varSpacingXSm" value="{!varSpacingXSmall}"/>
+    <aura:token name="varSpacingSm" value="{!varSpacingSmall}"/>
+    <aura:token name="varSpacingMed" value="{!varSpacingMedium}"/>
+    <aura:token name="varSpacingLa" value="{!varSpacingLarge}"/>
+    <aura:token name="varSpacingXLa" value="{!varSpacingXLarge}"/>
+    <aura:token name="varSpacingXxLa" value="{!varSpacingXxLarge}"/>
+    <aura:token name="varSpacingVerticalXxSm" value="{!varSpacingVerticalXxSmall}"/>
+    <aura:token name="varSpacingVerticalXSm" value="{!varSpacingVerticalXSmall}"/>
+    <aura:token name="varSpacingVerticalMed" value="{!varSpacingVerticalMedium}"/>
+    <aura:token name="varSpacingVerticalLa" value="{!varSpacingVerticalLarge}"/>
+    <aura:token name="varSpacingVerticalXLa" value="{!varSpacingVerticalXLarge}"/>
+    <aura:token name="varSpacingVerticalXxLa" value="{!varSpacingVerticalXxLarge}"/>
+    <aura:token name="varSpacingHorizontalXxSm" value="{!varSpacingHorizontalXxSmall}"/>
+    <aura:token name="varSpacingHorizontalXSm" value="{!varSpacingHorizontalXSmall}"/>
+    <aura:token name="varSpacingHorizontalMed" value="{!varSpacingHorizontalMedium}"/>
+    <aura:token name="varSpacingHorizontalLa" value="{!varSpacingHorizontalLarge}"/>
+    <aura:token name="varSpacingHorizontalXLa" value="{!varSpacingHorizontalXLarge}"/>
+    <aura:token name="varSpacingHorizontalXxLa" value="{!varSpacingHorizontalXxLarge}"/>
+    
+    <!--Agile Quote Tokens Start-->
+    <aura:token name="addIconColor" value="#005FB2"/>
+    <aura:token name="removeIconColor" value="#EF6E64"/>
+    
+    <!--Agile Quote Tokens End-->
+</aura:tokens>

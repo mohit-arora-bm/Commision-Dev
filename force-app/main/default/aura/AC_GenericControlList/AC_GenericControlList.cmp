@@ -1,0 +1,126 @@
+<aura:component controller="AC_GenericControlListController">
+    <!-- Exposed Attributes start -->
+	<aura:attribute name="objectAPIName" type="String"/>
+	<aura:attribute name="fieldsList" type="Object[]"/>
+	<aura:attribute name="title" type="String"/>
+	<aura:attribute name="isProductSearch" type="Boolean" default="false"/>
+    <!-- Exposed Attributes end -->
+    
+    <!-- Private Attributes start -->
+	<aura:attribute name="selectedRowId" type="String"/>
+	<aura:attribute name="deleteRecordId" type="String"/>
+	<aura:attribute name="unScheduleId" type="String"/>
+	<aura:attribute name="columns" type="Object[]"/>
+	<aura:attribute name="allData" type="Object[]"/> 
+	<aura:attribute name="showDeleteModal" type="Boolean" default="false"/>
+	<aura:attribute name="showUnScheduleModal" type="Boolean" default="false"/>
+	<aura:attribute name="disableNewButtion" type="Boolean" default="false"/>
+	
+	<!-- fieldsList example -->
+	<!--[{
+		fieldAPIName: Name
+		fieldLabel: Custom Name
+	}]-->
+    <!-- Private Attributes end -->
+
+	<aura:handler name="init" value="{! this }" action="{! c.doInit }"/>
+	<aura:registerEvent name="recordSelectEvent" type="c:AC_GenericControlRecordSelectEvt"/>
+	<aura:handler event="c:AC_GenericControlRecordSelectEvt" action="{!c.handlRefreshEvent}"/>
+	
+	<c:AC_DataService aura:id="dataService" />
+
+	<lightning:card title="{! v.title }" >
+        <lightning:spinner alternativeText="Loading" size="small" variant="brand" aura:id="spinner"/>
+        <aura:set attribute="actions">
+        	<lightning:buttonIcon iconName="utility:refresh" variant="border-filled" alternativeText="refresh" onclick="{! c.doInit }"/>
+			<lightning:button label="New"
+							disabled="{! v.disableNewButtion }"
+							onclick="{! c.handleRowSelect }"/>
+        </aura:set>
+        <p>
+	        <table class="slds-table slds-table_bordered " >
+				<thead>
+					<tr class=' slds-line-height_reset'>
+						<aura:iteration items="{! v.columns }" var="columnVar">
+							<th scope="col" >
+								<div class="slds-truncate" >{! columnVar }</div>
+							</th>
+						</aura:iteration>
+						<th scope="col" >
+							<div class="slds-truncate" >Next Schedule Date</div>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<aura:iteration items="{! v.allData }" var="recordVar">
+						<tr class="{! if(v.selectedRowId eq recordVar.recordId, 'selected', '') + ' slds-hint-parent'}"
+                            id="{! recordVar.recordId }">
+							<aura:iteration items="{! recordVar.fieldsList }" var="fieldVar" indexVar="ind">
+								<td data-label="{! fieldVar.fieldLabel }" id="{! recordVar.recordId }" >
+									<div class="slds-truncate" id="{! recordVar.recordId }">
+										<lightning:icon size="x-small" class="pointer" iconName="utility:delete" alternativeText="{! recordVar.recordId }" onclick="{! c.deleteRow }"/>
+										&nbsp;
+										<a id="{! recordVar.recordId }" onclick="{! c.handleRowSelect }">{! fieldVar.fieldValue }</a>
+									</div>
+								</td>
+							</aura:iteration>
+							<td data-label="Next Schedule Date/Time" >
+								<lightning:formattedDateTime value="{!recordVar.next}" year="numeric" month="numeric" day="numeric" hour="2-digit"
+								minute="2-digit" hour12="true"/>
+								&nbsp;
+								<aura:if isTrue="{! recordVar.next != null}">
+									<lightning:icon size="x-small" class="pointer" iconName="utility:clear" alternativeText="{! recordVar.recordId }" onclick="{! c.unSchedule }" title="UnSchedule"/>
+								</aura:if>
+							</td>
+						</tr>	
+					</aura:iteration>
+				</tbody>
+			</table>
+        </p>
+	</lightning:card>
+	
+	
+	<!-- warning modal -->
+	<aura:if isTrue="{! v.showDeleteModal }">
+		<section role="dialog" aria-modal="true" class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container">
+				<header class="slds-modal__header">
+					<h2 class="slds-text-heading_medium slds-hyphenate">Warning!</h2>
+				</header>
+				<div class="slds-modal__content slds-p-around_medium">
+					<center>
+						<p>
+							This action is irreversible.<br/>Are you sure you want to delete this template?
+						</p>
+					</center>
+				</div>
+				<footer class="slds-modal__footer">
+					<lightning:button label="No" title="No" onclick="{! c.cancelDelete }"/>
+					<lightning:button label="Yes" title="Yes" variant="brand" onclick="{! c.deleteTemplate }"/>
+				</footer>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</aura:if>
+	<aura:if isTrue="{! v.showUnScheduleModal }">
+		<section role="dialog" aria-modal="true" class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container">
+				<header class="slds-modal__header">
+					<h2 class="slds-text-heading_medium slds-hyphenate">Warning!</h2>
+				</header>
+				<div class="slds-modal__content slds-p-around_medium">
+					<center>
+						<p>
+							Are you sure you want to unschedule this job?<br/>After this you have to schedule it manually.
+						</p>
+					</center>
+				</div>
+				<footer class="slds-modal__footer">
+					<lightning:button label="No" title="No" onclick="{! c.cancelUnschedule }"/>
+					<lightning:button label="Yes" title="Yes" variant="brand" onclick="{! c.unScheduleTemplate }"/>
+				</footer>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</aura:if>
+</aura:component>

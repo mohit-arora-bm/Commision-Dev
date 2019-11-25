@@ -1,0 +1,235 @@
+<aura:component controller="AC_TemplateConfigController">
+    <aura:attribute name="data" type="Object" default="{}"/>
+    <aura:attribute name="allFieldOptions" type="List" default="[]"/>
+    <aura:attribute name="fieldOptions" type="List" default="[]"/>
+    <aura:attribute name="mappingFields" type="List" default="[]"/>
+    <aura:attribute name="filterComboOptions" type="List" default="[]"/>
+    <aura:attribute name="rowNo" type="Integer"/>
+    <aura:attribute name="selectedTemplateObject" type="String"  default="" description="Template object"/>
+    <aura:attribute name="dataTypeMap" type="Map"/>
+    <aura:attribute name="onlyReferenceField"      type="List"     default=""/>
+    <!-- <aura:attribute name="lastSuccessDate" type="Datetime"/> -->
+
+    <aura:handler event="c:AC_FieldSelectedEvt" name="AC_FieldSelectedEvt" action="{! c.handleFieldChange }"/>
+
+    <aura:method name="validateComponent" action="{! c.validateComponent }"/>
+    <aura:registerEvent name="dataRowEvent" type="c:AC_DataRowEvent"/>
+    <aura:registerEvent name="cloneSectionEvent" type="c:AC_CloneSectionEvent"/>
+
+    <c:AC_DataService aura:id="dataService" />
+    <lightning:spinner alternativeText="Loading" size="small" variant="brand" class="slds-hide" aura:id="spinner"/>
+
+    <div class="{! (v.data.isOpen ? 'openBox' : '') + (v.data.hasError ? ' boxBorderError' : ' boxBorder') }">
+        <lightning:layout class="{! if(v.data.hasError, 'sectionHeaderErrorBackground', 'sectionHeaderBackground') }">
+            <aura:if isTrue="{! v.data.isOpen }">
+                <lightning:layoutItem size="1" padding="around-small">
+                    <lightning:buttonIcon iconName="utility:chevrondown" variant="bare" onclick="{! c.closeAcc }" alternativeText="close" size="large" class="slds-align--absolute-center"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="6" padding="around-small">
+                    <lightning:input type="text" label="Description" variant="label-hidden" value="{!v.data.description}" required="true" aura:id="templateForm"/>
+                </lightning:layoutItem>
+                <aura:set attribute="else">
+                    <lightning:layoutItem size="1" padding="around-small">
+                        <lightning:buttonIcon iconName="utility:chevronright" variant="bare" onclick="{! c.openAcc }" alternativeText="open" size="large" class="slds-align--absolute-center"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="6" padding="around-small">
+                        <legend class="column-Item-design font18">{!v.data.description}</legend>
+                    </lightning:layoutItem>
+                </aura:set>
+            </aura:if>
+            <lightning:layoutItem size="1" padding="around-small">
+                <aura:if isTrue="{!v.rowNo != 0}">
+                    <lightning:buttonIcon iconName="utility:ban" class="banIcon pointer" variant="bare" size="large" onclick="{!c.removeDataRow}" alternativeText="close"/>
+                    <aura:set attribute="else">
+                        <lightning:buttonIcon iconName="utility:new" class="newIcon pointer" variant="bare" size="large" onclick="{!c.addDataRow}" alternativeText="add"/>
+                    </aura:set>
+                </aura:if>
+                &nbsp;
+                <span onclick="{! c.cloneSection }">
+                    <lightning:icon iconName="action:clone" class="pointer" variant="bare" size="xx-small" alternativeText="Clone this Section"/>
+                </span>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <aura:if isTrue="{!v.data.isOpen}">
+            <!-- Select Fields -->
+            <legend class="column-Item-design slds-m-top_small font18">Select Fields</legend>
+            <aura:iteration items="{!v.data.selectedFieldOptions}" var="templateVal" indexVar="index">
+                <div class="slds-grid" >
+                    <div class="slds-col slds-grid slds-size_5-of-12">
+                        <div class="slds-col slds-size_7-of-12 column-Item-design">
+                            <!-- <aura:if isTrue="{!templateVal.userLookup}">
+                                <c:AC_DynamicRecordLookup objectAPIName="User" selectedRecord="{!templateVal.userId}"/>
+                                <aura:set attribute="else"> -->
+                                <c:AC_TemplateFieldSearch indexVar="{!index }"
+                                        fieldOptions="{! v.allFieldOptions }"
+                                        fieldsList="{! v.fieldOptions }"
+                                        isFieldRelated="{! templateVal.isFieldRelated }"
+                                        selectedOption="{! templateVal.selectedField }"
+                                        aura:id="templateFieldSearch"
+                                        hasError="{!v.data.hasError}"
+                                        type="selection"/>             
+                                <!-- </aura:set>
+                            </aura:if> -->
+                                        
+                        </div>
+                        <div class="slds-col slds-size_5-of-12 column-Item-design">
+                            <!-- <aura:if isTrue="{!and(templateVal.isFieldRelated,!templateVal.userLookup)}"> -->
+                            <lightning:input type="text" name="fieldLabel" label="Alias" value="{!templateVal.customLabel}" title="{!templateVal.customLabel}" required="true" disabled="{!!templateVal.isFieldRelated}" aura:id="templateForm" pattern="[A-Za-z]*$" messageWhenPatternMismatch="Only alphabets are allowed!"/>
+                            <!-- </aura:if> -->
+                        </div>
+                    </div>
+                    <div class="slds-col slds-grid slds-size_7-of-12">
+                      
+                        <div class="slds-col slds-size_3-of-12 column-Item-design">
+                            <aura:if isTrue="{! templateVal.apexDataType == 'CURRENCY' || templateVal.apexDataType == 'DOUBLE' || templateVal.apexDataType == 'INTEGER' }">
+                                <lightning:select label="Aggreagate Function" required="true" value="{! templateVal.func}" aura:id="templateForm">
+                                    <option value="" selected="true">choose one...</option>
+                                    <option value="sum" >sum</option>
+                                    <option value="min" >min</option>
+                                    <option value="max" >max</option>
+                                    <option value="min" >first</option>
+                                </lightning:select> 
+                            </aura:if>
+                            <aura:if isTrue="{! templateVal.mapping == 'agileComp__Commission_Sales_Rep__c'}">
+                                <lightning:input type="toggle" label="Map to User Id" name="Map to User Id" checked="{!templateVal.userLookup}" class="slds-m-top--large"/>
+                            </aura:if>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12 column-Item-design">
+                            <!-- <aura:if isTrue="{! templateVal.dataType == 'number' || templateVal.dataType == 'currency'}"> -->
+                                 
+                            <lightning:select label="Field Mapping" required="{! templateVal.apexDataType == 'CURRENCY' }" value="{! templateVal.mapping}" aura:id="templateForm">
+                                <option value="" selected="true">choose one...</option>
+                                <aura:iteration items="{!v.mappingFields}" var="field">
+                                    <aura:if isTrue="{! templateVal.apexDataType == field.displayType || (and(templateVal.apexDataType == 'ID',field.displayType == 'REFERENCE')) || (and((templateVal.apexDataType == 'DATETIME' || templateVal.apexDataType == 'DATE'), (field.displayType == 'DATE' || field.displayType == 'DATETIME'))) || (and(templateVal.dataType == 'number', (field.displayType == 'INTEGER' || field.displayType == 'DOUBLE' || field.displayType == 'CURRENCY')))}">
+                                        <option value="{!field.value}">{!field.label}</option>
+                                    </aura:if>
+                                </aura:iteration>
+                            </lightning:select> 
+                            <!-- </aura:if> -->
+                        </div>
+                        <div class="slds-col slds-size_2-of-12 column-Item-design top-margin">
+                            <aura:if isTrue="{!index == 0}">
+                                <center>
+                                    <lightning:buttonIcon iconName="utility:new" class="newIcon pointer" variant="bare" size="large" onclick="{!c.addFieldRow}" alternativeText="new"/>                                    
+                                </center>
+                                <aura:set attribute="else">
+                                    <center>
+                                        <lightning:buttonIcon iconName="utility:ban" class="banIcon pointer" variant="bare" size="large" onclick="{!c.removeFieldRow}" name="{!index}" alternativeText="close"/>
+                                    </center>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </div> 
+                </div>
+                <hr class="seprator2"/>
+            </aura:iteration>
+            
+            <legend class="column-Item-design slds-m-top_small font18">Select Document/Account split</legend>
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem size="6" padding="around-small">
+                    <c:AC_TemplateFieldSearch fieldOptions="{! v.allFieldOptions }"
+                        fieldsList="{! v.fieldOptions }"
+                        isFieldRelated="{! v.data.documentField.isFieldRelated }"
+                        selectedOption="{! v.data.documentField.selectedField }"
+                        aura:id="templateFieldSearch"
+                        hasError="{!v.data.hasError}"
+                        label="Select Document Spit"
+                        type="Document"
+                        /> 
+                </lightning:layoutItem>
+                <lightning:layoutItem size="6" padding="around-small">
+                    <c:AC_TemplateFieldSearch fieldOptions="{! v.allFieldOptions }"
+                        fieldsList="{! v.fieldOptions }"
+                        isFieldRelated="{! v.data.accountField.isFieldRelated }"
+                        selectedOption="{! v.data.accountField.selectedField }"
+                        hasError="{!v.data.hasError}"
+                        label="Select Account Spit"
+                        isRequired="false"
+                        type="Account"
+                        /> 
+                </lightning:layoutItem>
+            </lightning:layout>
+            <div class="slds-hidden">
+                <lightning:input value="{! v.data.documentField.selectedField }" required="true"  aura:id="templateForm"/>
+            </div>
+            <!--  Filter Criteria  -->
+            <legend class="column-Item-design slds-m-top_small font18">Select Filter Criteria</legend>
+            <aura:iteration items="{!v.data.selectedFilters}" var="filter" indexVar="index">
+                <div class="slds-grid slds-m-around--medium" >
+                    <div class="slds-col slds-size_1-of-12">
+                        <button class="pointerNone slds-button slds-button_brand" >{!index+1}</button>
+                    </div>
+                    <div class="slds-col slds-size_3-of-12 slds-p-horizontal--small">
+                     
+                        <c:AC_TemplateFieldSearch indexVar="{!index }"
+                                            fieldOptions="{! v.allFieldOptions }"
+                                            fieldsList="{! v.fieldOptions }"
+                                            isFieldRelated="{! filter.isFieldRelated }"
+                                            selectedOption="{! filter.selectedField }"
+                                            aura:id="templateFieldSearch"
+                                            hasError="{!v.data.hasError}"
+                                            type="filter"/>   
+                    </div>
+                    <div class="slds-col slds-size_3-of-12 slds-p-horizontal--small">
+                        <lightning:select label="Add Filter" required="true" value="{!filter.operation}" aura:id="templateForm">
+                            <option value="" selected="true">choose one...</option>
+                            <aura:iteration items="{!filter.operations}" var="opt">
+                                <option value="{!opt.value}">{!opt.label}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                    <div class="slds-col slds-size_3-of-12 slds-p-horizontal--small">
+                        <aura:if isTrue="{!filter.apexDataType == 'REFERENCE' || filter.apexDataType == 'ID'}">
+                            <c:AC_DynamicRecordLookup objectAPIName="{!empty(filter.relatedObjectName) ? v.selectedTemplateObject : filter.relatedObjectName}" selectedRecord="{!filter.selectedRecord}"/>
+                            <aura:set attribute="else">
+                                <aura:if isTrue="{!filter.apexDataType == 'BOOLEAN'}">
+                                    <lightning:input type="checkbox" label="" name="checkbox" checked="{!filter.filterValue}" aura:id="templateForm" class="slds-m-around--x-large"/>
+                                    <aura:set attribute="else">
+                                        <aura:if isTrue="{!!filter.useLastSuccessDate}">      
+                                        <lightning:input type="{!filter.dataType}" value="{!filter.filterValue}" required="true" aura:id="templateForm"></lightning:input>
+                                        </aura:if>
+                                    </aura:set>
+                                </aura:if>
+                                <aura:if isTrue="{!filter.apexDataType == 'DATE' || filter.apexDataType == 'DATETIME'}">
+                                    <lightning:input type="toggle" label="Use last success date" name="{!index}" class="{!filter.apexDataType}" checked="{!filter.useLastSuccessDate}" onchange="{!c.useLastSuccess}"/>
+                                    
+                                </aura:if>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                    <div class="slds-col slds-size_2-of-12 slds-m-top--large">
+                        <aura:if isTrue="{!index == 0}">
+                            <center>
+                                <lightning:buttonIcon iconName="utility:new" class="newIcon pointer" variant="bare" size="large" onclick="{!c.addFilterRow}" alternativeText="new"/>
+                            </center>
+                            <aura:set attribute="else">
+                                <center>
+                                    <lightning:buttonIcon iconName="utility:ban" class="banIcon pointer" variant="bare" size="large" onclick="{!c.removeFilterRow}" name="{!index}" alternativeText="close"/>
+                                </center>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+                <hr class="seprator2"/>
+            </aura:iteration>
+
+            <!-- Custom Filter -->
+            <div class='slds-box CardBoardCSS' >
+                <lightning:radioGroup
+                            label="Conditions"
+                            options="{! v.filterComboOptions }"
+                            value="{! v.data.selectedFilterCombo }"
+                            type="radio"
+                            onchange="{!c.handleFilterCombo}"/>
+                <aura:if isTrue="{!v.data.isCustom}">
+                    <lightning:helptext class="positionRelative" content="Your filter must use parentheses around successive AND and OR expressions." />
+                    <lightning:input label="Logic" placeholder=" Example: 1 AND ( 2 OR 3 ), (1 OR 2) AND 3..." required="true" class="customWidth" value="{!v.data.filterCombo}" aura:id="templateForm"/>
+                </aura:if>
+            </div>
+
+            <aura:set attribute="else">
+                <hr class="seprator"/>
+            </aura:set>
+        </aura:if>
+    </div>
+</aura:component>

@@ -1,0 +1,9 @@
+.THIS .selected {
+    background-color: lavender !important;
+}
+.THIS .pointer {
+    cursor: pointer;
+}
+.THIS .slds-table td {
+    padding: 3px 0 3px 0;
+}

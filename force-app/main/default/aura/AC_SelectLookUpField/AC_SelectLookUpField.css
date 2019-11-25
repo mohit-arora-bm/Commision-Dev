@@ -1,0 +1,14 @@
+.THIS {
+}
+
+.THIS .newIcon svg {
+    fill: token(addIconColor) !important;
+}
+
+.THIS .banIcon svg {
+    fill: token(removeIconColor) !important;
+}
+
+.THIS .pointer {
+    cursor: pointer;
+}

@@ -1,0 +1,49 @@
+<aura:component>
+    <!-- shared attributes -->
+    <aura:attribute name="label" type="String" default="Select Field"/>
+    <aura:attribute name="isRequired" type="Boolean" default="true"/>
+    <aura:attribute name="fieldOptions" type="Object[]" default="[]"/>
+    <aura:attribute name="fieldsList" type="Object[]" default="[]"/>
+    <aura:attribute name="selectedOption" type="String"/>
+    <aura:attribute name="selectedOptionOnCancel" type="String"/>
+    <aura:attribute name="isFieldRelated" type="Boolean" default="false"/>
+    <aura:attribute name="selectedOptionObj" type="Object"/>
+    <aura:attribute name="indexVar" type="Integer"/>
+    <aura:attribute name="initSelectedValue" type="String"/>
+    <aura:attribute name="hasError" type="Boolean" default="false"/>
+    <aura:attribute name="type" type="String"/>
+    
+    <!-- handlers -->
+    <aura:handler name="change" value="{!v.isFieldRelated}" action="{!c.doInit}"/>
+    <aura:handler name="init" value="{! this }" action="{! c.doInit }"/>
+    <aura:handler event="c:AC_SetRelatedField" name="AC_SetRelatedField" action="{! c.handleSetRelatedFieldEvent }"/>
+    <!-- register events -->
+    <aura:registerEvent name="AC_FieldSelectedEvt" type="c:AC_FieldSelectedEvt"/>
+    <!-- aura:methods -->
+    <aura:method name="validateComponent" action="{! c.validateComp }" description="Validates the component"/>
+
+    <!-- Data Service -->
+    <c:AC_DataService aura:id="dataService" />
+
+    <aura:if isTrue="{! v.isFieldRelated }">
+        <lightning:layout>
+            <lightning:layoutItem size="10" smallDeviceSize="10" mediumDeviceSize="10" largeDeviceSize="10">
+                <lightning:input label="{! v.label }" value="{! v.selectedOptionObj.relatedField }" title="{! v.selectedOptionObj.relatedField }" disabled="true" required="{! v.isRequired }" aura:id="fieldSearchInput"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem class="slds-m-top_large" size="2" smallDeviceSize="2" mediumDeviceSize="2" largeDeviceSize="2">
+                <lightning:buttonIcon iconName="utility:ban" name="Field" class="banIcon pointer" variant="bare" size="large"  onclick="{! c.handleRemoveLookUpField }" alternativeText="close" />
+            </lightning:layoutItem>
+        </lightning:layout>
+        <aura:set attribute="else">
+            <lightning:select label="{! v.label }" onchange="{! c.handleFilterFieldChange }" required="{! v.isRequired }" aura:id="fieldSearchInput">
+                <option value="" selected="true">choose one...</option>
+                <aura:iteration items="{!v.fieldOptions}" var="option">
+                    <option value="{!option.value}" selected="{! v.selectedOption eq option.value }"> {!option.label} 
+                        <aura:if isTrue="{!option.isRelated}">➤</aura:if>
+                    </option>
+                </aura:iteration>
+            </lightning:select>
+        </aura:set>
+    </aura:if>
+    <div aura:id="LookUpSelectionComponent"></div>
+</aura:component>

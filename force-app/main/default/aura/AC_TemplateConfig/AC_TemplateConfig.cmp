@@ -1,0 +1,92 @@
+<aura:component controller="AC_TemplateConfigController">
+    <aura:attribute name="templateNames"        type="List"   />
+    <aura:attribute name="recordId"             type="String"   default="" />
+    <aura:attribute name="templateConfigObject" type="Object" />
+    <aura:attribute name="selectedFieldOptions" type="List"     default="" />
+    <aura:attribute name="filterOptions"        type="List"     default="" />
+    <aura:attribute name="selectedFilters"      type="List"     default="" />
+    <aura:attribute name="fieldOptions"         type="List"     default="" />
+    <aura:attribute name="allFieldOptions"      type="List"     default=""/>
+    <aura:attribute name="onlyReferenceField"      type="List"     default=""/>
+    <!-- <aura:attribute name="selectedFieldsList"   type="List"    default="[]"/>  -->
+    <aura:attribute name="dataList"             type="List"    default="[]"/>
+    <aura:attribute name="mappingFields"        type="List"    default="[]"/>
+    <aura:attribute name="selectedTemplateObject" type="String"  default="" description="Template object"/>
+    <aura:attribute name="initCompleted" type="Boolean" default="false"/>
+    <aura:attribute name="minColumnWidth" type="String" default="50"/>
+    <aura:attribute name="dataTypeMap" type="Map"/> 
+    <aura:attribute name="isScheduled" type="Boolean" default="false"/>
+    <aura:attribute name="lastSuccessDate" type="Datetime"/>
+    <aura:attribute name="filterComboOptions" type="List" default="[
+                                                        {'label': 'All of the conditions are met(AND)', 'value': 'AND'},
+                                                        {'label': 'All of the conditions are met(OR)', 'value': 'OR'},
+                                                        {'label': 'Customize the logic', 'value': 'Custom'}]"/>
+    <aura:attribute name="vfHost" type="String"/>
+    <!-- Event Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="c:AC_ObjectChangeEvent" action="{!c.handleObjectChange}"/>
+    <aura:handler name="dataRowEvent" event="c:AC_DataRowEvent" action="{! c.addDataRow }"/>
+    <aura:handler name="cloneSectionEvent" event="c:AC_CloneSectionEvent" action="{! c.cloneDataRow }"/>
+    <aura:registerEvent name="recordSelectEvent" type="c:AC_GenericControlRecordSelectEvt"/>
+
+    <iframe aura:id="vfFrame" src="{!v.vfHost + '/apex/SessionIdPage'}" class="slds-hide"/>
+    <!-- Data Service -->
+    <c:AC_DataService aura:id="dataService" />
+
+    <!-- Body -->
+    <div>   
+        <div class="quoteTempConfig">
+            <!-- Lightning Spinner -->
+            <lightning:spinner alternativeText="Loading" size="medium" class="templateConfigSpinner slds-hide" aura:id="Spinner"/>
+            <aura:if isTrue="{!!empty(v.recordId)}">
+                <b> Last Successfull run date :</b> 
+                <lightning:formattedDateTime value="{!v.lastSuccessDate}" year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit" hour12="true"/>
+            </aura:if>
+            <aura:if isTrue="{!v.isScheduled}">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" role="alert">
+                    <h2>The changes you made here will not reflect until you reschedule the template.
+                    </h2>
+                </div>
+            </aura:if>
+            <div class="headerSection fullWidth inlineDisplay">
+                <p class="headerText" style="width: 80%;">
+                    {!if(empty(v.recordId), 'New Template', 'Edit Template')}
+                </p>
+                <div>
+                    <aura:if isTrue="{!!empty(v.recordId)}">
+                        <lightning:button label="Run now" variant="brand" onclick="{!c.runNow}" />
+                    </aura:if>
+                    <lightning:button label="Save" variant="brand" onclick="{!c.saveTemplateRecord}" />
+                </div>
+            </div>
+            <hr class="headerRuler"/>
+            <div class="attribute-design slds-m-top_small slds-m-bottom_medium">
+                <div class="slds-grid ">
+                    <div class="slds-col slds-size_1-of-3 column-Item-design">
+                        <lightning:input name="templateName" label="Template Name" required="true" aura:id="templateForm" value="{!v.templateConfigObject.templateName}" maxlength="24" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-3 column-Item-design">
+                        <c:AC_DynamicObjectLookUp aura:id="dynamicObjectLookup" selectedObject="{!v.selectedTemplateObject}" selectedObjectAPIName="{!v.selectedTemplateObject}"/>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="seprator"/>
+            <aura:if isTrue="{!and(!empty(v.selectedTemplateObject),v.initCompleted)}">
+                <aura:iteration items="{!v.dataList}" var="data" indexVar="rowNo">
+                    <c:AC_SelectFieldsAndFilters data = "{! data }"
+                                                allFieldOptions = "{! v.allFieldOptions }"
+                                                fieldOptions = "{! v.fieldOptions }"
+                                                mappingFields = "{! v.mappingFields }"
+                                                filterComboOptions = "{! v.filterComboOptions }"
+                                                rowNo = "{! rowNo }"
+                                                dataTypeMap = "{! v.dataTypeMap }"
+                                                selectedTemplateObject = "{!v.selectedTemplateObject}"
+                                                onlyReferenceField = "{!v.onlyReferenceField}"
+                                                aura:id = "fieldsDataContainer"/>
+                </aura:iteration>
+            </aura:if>
+        </div>
+    </div>
+                
+</aura:component>

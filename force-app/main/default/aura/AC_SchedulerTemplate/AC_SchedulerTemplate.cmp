@@ -1,0 +1,40 @@
+<aura:component implements="force:appHostable" controller="AC_SchedulerTemplateController">
+    <ltng:require styles="{!$Resource.Cron + '/jquery-cron-quartz-master/src/jquery-cron-quartz.css'}"
+    scripts="{!join(',',
+          $Resource.jquery,
+          $Resource.Cron+ '/jquery-cron-quartz-master/src/jquery-cron-quartz.js')}"
+                  afterScriptsLoaded="{!c.loadJquery}"/> 
+
+    <aura:attribute name="options" type="List" default="[
+    {'label': 'One time', 'value': 'One time'},
+    {'label': 'Multilple', 'value': 'Multilple'}
+    ]"/>
+    <aura:attribute name="inputType" type="String" default="One time"/>
+    <aura:attribute name="scheduleOn" type="DateTime"/>
+    <aura:attribute name="expiresOn" type="DateTime"/>
+    <aura:attribute name="templateId" type="String"/>
+    <aura:attribute name="selectedUser" type="Object" default=""/>
+    <aura:attribute name="isScheduled" type="Boolean" default="false"/>
+    <aura:registerEvent name="recordSelectEvent" type="c:AC_GenericControlRecordSelectEvt"/>
+    <!-- Data Service -->
+    <c:AC_DataService aura:id="dataService" />
+    <div class="outerDiv">
+        <!-- Lightning Spinner -->
+        <lightning:spinner alternativeText="Loading" size="medium" class="templateConfigSpinner slds-hide" aura:id="Spinner"/>
+
+        <c:AC_DynamicRecordLookup objectAPIName="User" label="Select User" selectedRecord="{!v.selectedUser}"/>
+        <lightning:radioGroup name="selectOption"
+                            label="Select Option"
+                            options="{! v.options }"
+                            value="{! v.inputType }"
+                            type="radio"/>
+        <div class="{!v.inputType != 'Multilple' ? '' : 'slds-hide'}">
+            <lightning:input type="datetime" name="input1" label="Enter a date/time value" value="{!v.scheduleOn}" class="slds-m-top--large" timezone="GMT" timeStyle="long"/>
+        </div>
+        <div class="{!v.inputType == 'Multilple' ? '' : 'slds-hide'}">
+            <div id='cron' aura:id="cron" class="slds-m-top--large"></div>
+        </div>
+        <lightning:button variant="brand" label="Schedule it!" title="Schedule it!" onclick="{! c.scheduleIt }" disabled="{!v.isScheduled}"/>
+    </div>
+
+</aura:component>

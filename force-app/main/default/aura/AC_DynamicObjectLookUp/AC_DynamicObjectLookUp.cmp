@@ -1,0 +1,100 @@
+<aura:component implements="force:appHostable,force:hasRecordId" access="global" controller="AC_DynamicObjectLookUpController" >
+
+	<aura:attribute name="listofsobject" type="List" />
+	<aura:attribute name="searchText" type="String"/>
+	<aura:attribute name="issearching" type="Boolean" default="false"/>
+	<aura:attribute name="selectedObject" type="String" default=""/>
+	<aura:attribute name="selectedObjectName" type="String"/>
+	<aura:attribute name="selectedObjectAPIName" type="String"/>
+	<aura:attribute name="sldsclass" type="String" default=""/>
+	<aura:attribute name="noRecordsFound" type="String" default="No Object found!"/>
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+   	<aura:registerEvent name="ObjectChangeEvent" type="c:AC_ObjectChangeEvent"/>
+
+	<c:AC_DataService aura:id="dataService"/>
+
+	<aura:method name="reload" action="{!c.doInit}" />
+	
+    <div>
+		<div class="slds-form-element">
+			<label class="slds-form-element__label" >Select Object</label>
+			<div class="slds-form-element__control">
+				<div class="slds-combobox_container">
+					<div class="{!'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click '+v.sldsclass}" aria-expanded="true" aria-haspopup="listbox" role="combobox">
+						<div class="slds-combobox__form-element" role="none">
+							<ul class="slds-list_horizontal">
+								<li>
+									<aura:if isTrue="{!empty(v.selectedObjectName)}">
+									<lightning:input
+								        name="inline-search-input"
+								        label="Related To"
+								        type="search"
+								        variant="label-hidden"
+								        aria-autocomplete="list"
+								        autocomplete="off"
+								        onblur="{!c.onBlur}"
+								        isLoading="{! v.issearching }"
+								        aria-controls="listbox-search"  
+								        onkeyup="{! c.findObject }" aura:id="searchInput"  value="{!v.searchText}" required="true" />
+								        <aura:set attribute="else">
+											<div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right" role="none">
+												<span class="slds-icon_container slds-icon-standard-account slds-combobox__input-entity-icon" title="{!v.selectedObjectName}">
+													<lightning:icon iconName="standard:sobject" alternativeText="Record" />
+													<span class="slds-assistive-text">{!v.selectedObjectName}</span>
+												</span>
+												<input class="slds-input slds-combobox__input slds-combobox__input-value slds-truncate" type="text" placeholder="Select an Option" readonly="true" value="{!v.selectedObjectName}"
+												/>
+												<button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" title="Remove selected option" onclick="{!c.onClear}">
+													<lightning:icon iconName="utility:close" alternativeText="Record" size="xx-small" />
+													<span class="slds-assistive-text">Remove selected option</span>
+												</button>
+											</div>
+										</aura:set>
+								    </aura:if>
+								</li>
+								<!-- <li>
+						    		<lightning:buttonIcon iconName="utility:close"  variant="border-filled"  onclick="{! c.hideLookup }" size="medium" alternativeText="Close dropDown list" />
+								</li> -->
+							</ul>
+						</div> 
+						<aura:if isTrue="{!not(empty(v.listofsobject))}">
+							<div id="listbox-id-2" aura:id="searchListDropdown" class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox">
+								<ul class="slds-listbox slds-listbox_vertical" role="presentation">
+									<aura:iteration items="{!v.listofsobject}" var="item">
+										<li role="presentation" class="slds-listbox__item">
+											<div class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" onmousedown="{! c.onSelect }" id="{! item.value }" role="option">
+												<span class="slds-media__figure slds-listbox__option-icon">
+													<span class="slds-media__figure slds-listbox__option-icon">
+														<span class="slds-icon_container">
+															<lightning:icon iconName="standard:sobject" alternativeText="object" size="small" />
+														</span>
+													</span>
+												</span>
+												<span class="slds-media__body">
+													<span class="slds-listbox__option-text slds-listbox__option-text_entity">{!item.label}</span>
+													<span class="slds-listbox__option-meta slds-listbox__option-meta_entity"><p class="textSize">{!item.value}</p></span>
+												</span>
+											</div>
+										</li>
+							        </aura:iteration>
+								</ul>
+								<!-- <aura:set attribute="else">
+									{!v.noRecordsFound}
+								</aura:set> -->
+							</div>
+						</aura:if>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<aura:html tag="style">
+		[data-element-id="searchClear"] {
+		    display: none;
+		}
+	</aura:html>
+
+</aura:component>

@@ -1,0 +1,29 @@
+<aura:component>
+    <aura:attribute name="dataItem" type="Object"/>
+    <aura:attribute name="templateItem" type="Object"/>
+    <aura:attribute name="hasError" type="Boolean" default="false"/>
+    <aura:attribute name="mappingFields" type="List" default="[]"/>
+    <aura:method name="validateComponent" action="{! c.validateComp }"/>
+
+    <div class="slds-col slds-size_3-of-12 column-Item-design">
+        <aura:if isTrue="{! v.templateItem.dataType == 'number' || v.templateItem.dataType == 'currency'}">
+            <lightning:select label="Aggreagate Function" required="true" value="{! v.templateItem.func}" aura:id="templateForm">
+                <option value="" selected="true">choose one...</option>
+                <option value="sum" >sum</option>
+                <option value="min" >min</option>
+                <option value="max" >max</option>
+                <option value="first" >first</option>
+            </lightning:select> 
+        </aura:if>
+    </div>
+    <div class="slds-col slds-size_3-of-12 column-Item-design">
+        <aura:if isTrue="{! v.templateItem.dataType == 'number' || v.templateItem.dataType == 'currency'}">
+            <lightning:select label="Field Mapping" required="true" value="{! v.templateItem.mapping}" aura:id="templateForm">
+                <option value="" selected="true">choose one...</option>
+                <aura:iteration items="{!v.mappingFields}" var="field">
+                    <option value="{!field.value}">{!field.label}</option>
+                </aura:iteration>
+            </lightning:select> 
+        </aura:if>
+    </div>
+</aura:component>

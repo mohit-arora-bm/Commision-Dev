@@ -1,0 +1,47 @@
+<aura:component implements="force:appHostable,force:hasRecordId" 
+                controller="AC_GenericControlListController" access="global">
+       
+    <aura:attribute name="templateNames" 	type="list"  />
+    <aura:attribute name="recordId" 	type="String"   default="" />
+    <aura:attribute name="fieldList" 	type="List" default="[{'fieldAPIName' : 'agileComp__AC_Name__c','fieldLabel' :'Name'}]"/>
+    <aura:attribute name="isComponentDisabled" type="Boolean" />
+    <aura:attribute name="isScheduled" type="Boolean" default="false"/>
+
+    <!-- Aura Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:handler event="c:AC_GenericControlRecordSelectEvt" action="{!c.handleApplicationEventFired}"/>
+	<div >
+        <aura:if isTrue="{!v.isComponentDisabled}">
+            <ui:message title="Warning" severity="warning" closable="true"> 
+                    You do not have edit permission.
+            </ui:message>
+        </aura:if>
+    	<div class="{! if( v.isComponentDisabled eq true ,'ComponentDisable','') + ' quoteTempContainer'}">
+        	<div class="slds-grid slds-wrap">
+              	<div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12 slds-large-size_3-of-12">
+                    <c:AC_GenericControlList objectAPIName="agileComp__AC_Templates_Config__c"
+                            fieldsList="{!v.fieldList}"
+                            title="Existing Templates"
+                            />
+              	</div>
+              	<div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12 slds-large-size_9-of-12 slds-p-left--medium" style="border-radius: 3px;">
+                        
+                    <lightning:tabset selectedTabId="config">
+                        <lightning:tab label="Template Config" id="config">
+                            <div aura:id="templateConfigComp"></div>
+                        </lightning:tab>
+                        <aura:if isTrue="{! !empty(v.recordId)}">
+                            <lightning:tab label="Template Scheduler" id="scheduler"> 
+                                <c:AC_SchedulerTemplate templateId="{!v.recordId}" isScheduled="{!v.isScheduled}"></c:AC_SchedulerTemplate>
+                            </lightning:tab>
+                            <lightning:tab label="Template Logs" id="error">
+                                <c:AC_ErrorLogs templateId="{!v.recordId}"></c:AC_ErrorLogs>
+                            </lightning:tab>
+                        </aura:if>
+                    </lightning:tabset>
+                    
+              	</div>
+            </div>
+        </div>
+    </div>
+</aura:component>

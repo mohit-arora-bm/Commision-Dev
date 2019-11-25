@@ -1,0 +1,141 @@
+<apex:page >
+    <apex:includeScript value="{!URLFOR($Resource.JSforce)}" />
+    <apex:includeScript value="{!URLFOR($Resource.JSZIP)}" />
+    
+    <script id="script">
+        // var lexOrigin = "https://commisiondev-dev-ed.lightning.force.com";
+        window.addEventListener("message", function(event) {
+            console.log("vf",event.origin,event.data);
+            if (event.origin !== getbase()) {
+                return;
+            }
+            let templateName = event.data;
+            nmclick(templateName);
+        });
+        function getbase() {
+            var totalPageURL = window.location.toString();
+            var protocalType= totalPageURL.split("//")[0];
+            var tempbaseURL = totalPageURL.split("//")[1].split("/");
+            var finalBaseURL = protocalType+'//'+tempbaseURL[0];
+            return finalBaseURL.replace('--agilecomp.visualforce.com','.lightning.force.com');
+           
+        }
+        function nmclick(templateName) {
+            let conn = new jsforce.Connection({ accessToken: '{!$Api.Session_Id}' });
+            let zip = new JSZip();
+            let batchContent = "public class " + templateName + " extends AC_BatchInterface  implements Database.Batchable<AggregateResult> , Database.Stateful {\n "
+
+                +	"String objAPI;\n"
+                +	"String query;\n"
+                +	"Integer index;\n"
+                +	"String templateId;\n"
+                +	"List<String> JSONStrs;\n"
+                +	"String userId;\n"
+                
+                +	"public "+ templateName + "(){}\n"
+                    
+                +   "public override void setVariables(List<String> JSONStrs, String objAPI, String query,Integer index, String templateId, String userId ) {\n"
+                +   "this.objAPI = objAPI;\n"
+                +   "this.query = query;\n"
+                +   "this.index = index;\n"
+                +   "this.templateId = templateId;\n"
+                +   "this.JSONStrs = JSONStrs;\n"
+                +   "this.userId = userId;\n"
+                +   "}\n"
+                
+                +	"public override Iterable<AggregateResult> start(Database.BatchableContext bc){\n"
+                +		"System.debug('>>>> start ' + query);\n"
+                +		"return new AggregateResultIterable(query);\n" 
+                +	"}\n" 
+                    
+                +	"public override void execute(Database.BatchableContext bc, List<AggregateResult> scope){\n"
+                +		"Integer currentIndex = index - 1;\n"
+                +		"System.debug(JSONStrs);\n"
+                +		"AC_SchedulerTemplateController.createCommisionInput(JSONStrs[currentIndex], objAPI, (List<AggregateResult>)scope, templateId);\n"
+                +	"}\n"
+                    
+                +	"public override void finish(Database.BatchableContext bc){\n"
+                +		"AC_SchedulerTemplateController.batchFinal(bc, templateId, index, JSONStrs, objAPI, userId);\n"
+                +	"}\n"
+                +"}";
+            
+            let testClassContent = "@isTest \n"
+                +"public with sharing class " + templateName + 'T' + " {\n"
+                    
+                +    "@isTest\n"
+                +    "static void testBatch() {\n"
+                +        "Account acc = new Account();\n"
+                +        "acc.Name = 'Test Acc';"
+                +        "insert acc;\n "
+                +        "agileComp__AC_Templates_Config__c template = new agileComp__AC_Templates_Config__c();\n"
+                +        "template.agileComp__AC_BatchClassName__c = '" + templateName + "';\n"
+                +        "template.agileComp__AC_Name__c = 'Acc';\n"
+                +        "template.Name = 'Acc';\n"
+                +        "String json = '{\"selectedFieldOptions\":[{\"customLabel\":\"Id\",\"selectedField\":\"Id\",\"dataType\":\"text\",\"func\":\"\",\"apexDataType\":\"ID\",\"isFieldRelated\":false,\"selectedFieldObj\":{},\"mapping\":\"agileComp__Account__c\",\"relatedObjectName\":null}],\"selectedFilters\":[{\"operations\":[{\"label\":\"Equals\",\"value\":\"EqualTo\"},{\"label\":\"Does not equal\",\"value\":\"NotEqualTo\"},{\"label\":\"Contains\",\"value\":\"Contains\"},{\"label\":\"Not Contains\",\"value\":\"NotContains\"}],\"label\":\"\",\"fieldType\":\"text\",\"filterValue\":\"Test\",\"operation\":\"Contains\",\"selectedField\":\"Name\",\"isFieldRelated\":false,\"dataType\":\"text\",\"apexDataType\":\"STRING\",\"customLabel\":\"Name\",\"relatedObjectName\":null}],\"description\":\"1\",\"documentField\":{\"isFieldRelated\":false,\"selectedField\":\"Id\",\"relatedObjectName\":null},\"accountField\":{\"isFieldRelated\":false,\"selectedField\":\"\"},\"isOpen\":false,\"filterOptions\":[],\"selectedFilterCombo\":\"AND\",\"filterCombo\":\"\",\"isCustom\":false,\"hasError\":false}';"
+                +        "template.agileComp__AC_Object__c = 'Account';\n"
+                +        "template.agileComp__AC_TemplateDataJson__c = '['+ json +']';\n"
+                +        "insert template;\n"
+                +        "Test.startTest();\n"
+                +        templateName + " tb = new " + templateName + "();\n"
+                        
+                +        "tb.setVariables(new List<String>{json}, 'Account', 'SELECT Id FROM Account Group by Id', 1, template.Id, UserInfo.getUserId());\n"
+                +        "database.executebatch(tb,200);\n"
+                +        "Test.stopTest();\n"
+                +    "}\n"
+                +"}\n";
+                console.log(batchContent);
+            let batchName = "classes/" + templateName +".cls"
+            zip.file(batchName, batchContent);
+            zip.file("classes/" + templateName + 'T'+ ".cls", testClassContent);
+            let clsXML = '<?xml version="1.0" encoding="UTF-8"?><ApexClass xmlns="http://soap.sforce.com/2006/04/metadata"><apiVersion>47.0</apiVersion><status>Active</status></ApexClass>';
+            zip.file(batchName + "-meta.xml", clsXML);
+            zip.file("classes/" + templateName + 'T'+ ".cls" + "-meta.xml", clsXML);
+            let packXML = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' + 
+                '<Package xmlns="http://soap.sforce.com/2006/04/metadata">' +  
+                '<types>' + 
+                '<members>' + templateName + '</members>' +
+                '<members>' + templateName + 'T' + '</members>' +
+                '<name>ApexClass</name>' + 
+                '</types>' + 
+                '<version>45.0</version>' + 
+                '</Package>';
+            zip.file("package.xml", packXML);
+            zip.generateAsync({type:"base64"})
+            .then(function(content) {
+                var deployOption = new Object();
+                deployOption.allowMissingFiles=true;
+                deployOption.autoUpdatePackage=false;
+                deployOption.checkOnly=false;
+                deployOption.ignoreWarnings=false;
+                deployOption.performRetrieve=false;
+                deployOption.purgeOnDelete=false;
+                deployOption.rollbackOnError=false;
+                deployOption.singlePackage=true;
+                var runTests = [];
+                runTests.push( templateName + 'T');
+                deployOption.runTests= runTests;
+                
+                deployOption.testLevel='RunSpecifiedTests';
+                
+                console.log(deployOption);
+                conn.metadata.deploy(content, deployOption)
+                .complete(function(err, result) {
+                    if (err) { console.error(err); }
+                    console.log('done ? :' + result.done);
+                    console.log('success ? : ' + result.true);
+                    console.log('state : ' + result.state);
+                    console.log('component errors: ' + result.numberComponentErrors);
+                    console.log('components deployed: ' + result.numberComponentsDeployed);
+                    console.log('tests completed: ' + result.numberTestsCompleted);
+                    if(result.numberComponentsDeployed > 0) {
+                        // var message = document.getElementById("message").value;
+                        parent.postMessage('refresh', getbase());
+                    }
+                });
+            });
+        }
+        //var fs = require('fs');
+        //var zipStream = fs.createReadStream("./path/to/MyPackage.zip");
+    
+    </script>
+</apex:page>

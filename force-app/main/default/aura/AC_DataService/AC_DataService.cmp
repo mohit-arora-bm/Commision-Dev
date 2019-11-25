@@ -1,0 +1,9 @@
+<aura:component controller="AC_DataService">
+    <aura:method name="fetch" action="{!c.fetch}">
+        <aura:attribute name="action" type="object" />
+    </aura:method>
+    <aura:method name="logException" action="{!c.logError}">
+    	<aura:attribute name="errorMessage" type="String"/>
+    	<aura:attribute name="stackTrace" type="String"/>
+    </aura:method>
+</aura:component>

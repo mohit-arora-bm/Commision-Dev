@@ -1,0 +1,69 @@
+<aura:component access="global" controller="AC_SelectLookUpFieldController"
+				implements="force:appHostable,force:hasRecordId,force:lightningQuickAction">
+	<aura:attribute name="fieldMeta" type="Object"/>
+	<aura:attribute name="option" type="List" default="[]"/>
+	<aura:attribute name="selectedFields" type="List" default="[]"/>
+	<aura:attribute name="displaySpinner" type="Boolean" default="false"/>
+	<aura:attribute name="displayCloseButton" type="Boolean" default="false"/>
+	<aura:attribute name="selectedField" type="String" default="" />
+	<aura:attribute name="showCancelButton" type="Boolean" default="true"/>
+	<aura:attribute name="eventAdditionalParam" type="Object"/>
+    
+    <aura:registerEvent name="AC_SetRelatedField" type="c:AC_SetRelatedField"/>
+    
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+	<c:AC_DataService aura:id="dataService" /> 
+
+	<div style="height: 640px;">
+		<section role="dialog" class="slds-modal slds-fade-in-open slds-modal_medium">
+			<div class="slds-modal__container">
+				<header class="slds-modal__header">
+					<lightning:buttonIcon iconName="utility:close" class="slds-float_right slds-modal__close" variant="bare" onclick="{!c.handleHide}"  alternativeText="close" />
+					<h2 class="slds-text-heading_medium slds-hyphenate">Select Related Field</h2>
+				</header>
+				<div class="slds-modal__content slds-p-around_medium">
+						<aura:if isTrue="{!v.displaySpinner}">
+					      <lightning:spinner alternativeText="Loading"   size="large" />
+					    </aura:if>
+						<lightning:layout >
+							<aura:iteration items="{!v.selectedFields}" var="field" indexVar="indexField">
+								<lightning:layoutItem padding="around-small" size="3">
+									<lightning:layout>
+        								<lightning:layoutItem>
+											<lightning:input  label="Selected Field" value="{!field.fieldLabel}" disabled="true" />
+										</lightning:layoutItem>
+										<aura:if isTrue="{! indexField ne 0}">
+											<lightning:layoutItem class="slds-m-top_large slds-m-left_medium">
+			                                   <lightning:buttonIcon iconName="utility:ban" class="banIcon pointer" variant="bare" size="large"  onclick="{!c.removeRow}" name="{!indexField}" alternativeText="close" />
+											</lightning:layoutItem>
+										</aura:if>
+									</lightning:layout>
+								</lightning:layoutItem>
+			                </aura:iteration>
+			                <aura:if isTrue="{!not(empty(v.option))}">
+				                <lightning:layoutItem padding="around-small" size="3">	 
+									<lightning:select name="FieldListOption"  onchange="{!c.handleChangeField}" value="" label="Select Field">
+										<option value=""  selected="true">choose one...</option>
+										<aura:iteration items="{!v.option}" var="option" indexVar="opIndex">
+											<option value="{!option.fieldAPIName}">
+												{!option.fieldLabel}
+												<aura:if isTrue="{!option.isRelated}">➤</aura:if>
+											</option>
+										</aura:iteration>
+									</lightning:select>
+			                	</lightning:layoutItem>
+		                	</aura:if>
+		            </lightning:layout>
+				</div>
+				<footer class="slds-modal__footer">
+					<aura:if isTrue="{! v.showCancelButton }">
+						<button class="slds-button slds-button_neutral" onclick="{!c.handleHide}" >Cancel</button>
+					</aura:if>
+					<button class="slds-button slds-button_brand" onclick="{!c.handleSave}">Save</button>
+				</footer>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</div>
+</aura:component>
