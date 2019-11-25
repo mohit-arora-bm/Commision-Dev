@@ -584,7 +584,6 @@ public with sharing class AC_SchedulerTemplateController {
         System.debug('>>>> final ' + job);
         List<agileComp__AC_Templates_Config__c> configs = [SELECT Id, agileComp__AC_Name__c,
                                                                 agileComp__AC_SuccessDateMap__c,
-                                                                agileComp__AC_Batch_Ids__c,
                                                                 agileComp__AC_BatchClassName__c 
                                                             FROM agileComp__AC_Templates_Config__c 
                                                             WHERE Id = : templateId ORDER BY CreatedDate DESC LIMIT 1];
