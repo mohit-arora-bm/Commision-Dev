@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Commission Teams house the users and the container to hold the dollars associated with the team.</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableLicensing>false</enableLicensing>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Active__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Whether sales team is active  Sales Team members should only reside in one sales team.</inlineHelpText>
+        <label>Active</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Commission_Attainment_Schedule__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Attainment Schedule that team members will defaul to, team members can override this schedule in another object.</inlineHelpText>
+        <label>Commission Attainment Schedule</label>
+        <referenceTo>Commission_Attainment_Schedule__c</referenceTo>
+        <relationshipLabel>Commission Teams</relationshipLabel>
+        <relationshipName>Commission_Teams</relationshipName>
+        <required>true</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Commission_Team_Rollup__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Allow for another team to utilize this teams values (Example would be a division team for leader payouts)</inlineHelpText>
+        <label>Commission Team Rollup</label>
+        <referenceTo>Commission_Team__c</referenceTo>
+        <relationshipLabel>Commission Teams</relationshipLabel>
+        <relationshipName>Commission_Teams</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Pay_All_Team_Members__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Pays all active team members regardless of contribution.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Pays all active team members regardless of contribution.</inlineHelpText>
+        <label>Pay All Team Members</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Team_Payment_Method__c</fullName>
+        <deprecated>false</deprecated>
+        <description>In conjunction with Pay All Team Members, determines how to assign percentage to user, if Total Team Contribution use the total Dollars * Team Percent attained. if Individual use the individuals contribution * team Percent Attained.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>In conjunction with Pay All Team Members, determines how to assign percentage to user, if Total Team Contribution use the total Dollars * Team Percent attained. if Individual use the individuals contribution * team Percent Attained.</inlineHelpText>
+        <label>Team Payment Method</label>
+        <required>true</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Total Team Contribution</fullName>
+                    <default>false</default>
+                    <label>Total Team Contribution</label>
+                </value>
+                <value>
+                    <fullName>Individual Contribution</fullName>
+                    <default>false</default>
+                    <label>Individual Contribution</label>
+                </value>
+                <value>
+                    <fullName>Commission Year Individual Period Payout Tier</fullName>
+                    <default>false</default>
+                    <label>Commission Year Individual Period Payout Tier</label>
+                </value>
+                <value>
+                    <fullName>Commission Year Individual Period Payout Step</fullName>
+                    <default>false</default>
+                    <label>Commission Year Individual Period Payout Step</label>
+                </value>
+                <value>
+                    <fullName>Commission Year Total Team Period Payout Tier</fullName>
+                    <default>false</default>
+                    <label>Commission Year Total Team Period Payout Tier</label>
+                </value>
+                <value>
+                    <fullName>Commission Year Total Team Period Payout Step</fullName>
+                    <default>false</default>
+                    <label>Commission Year Total Team Period Payout Step</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Team__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Drives the Tier Attainment Percentage</description>
+        <externalId>false</externalId>
+        <label>Team</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <label>Commission Team</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Commission_Attainment_Schedule__c</columns>
+        <columns>Commission_Team_Rollup__c</columns>
+        <columns>Team_Payment_Method__c</columns>
+        <columns>Pay_All_Team_Members__c</columns>
+        <columns>Team__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <label>Commission Teams Name</label>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Commission Teams</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>PayToAll_vs_IndividualPayout</fullName>
+        <active>true</active>
+        <errorConditionFormula>AND( Pay_All_Team_Members__c , CONTAINS( TEXT(Team_Payment_Method__c ) , &apos;Individual&apos;) )</errorConditionFormula>
+        <errorMessage>Can&apos;t have pay to all with Individual Payout</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>PaymentMethod_vs_Schedule</fullName>
+        <active>true</active>
+        <errorConditionFormula>AND( CONTAINS( TEXT(Team_Payment_Method__c ) , &apos;Commission Year&apos;) , ISPICKVAL( Commission_Attainment_Schedule__r.Calculation_Type__c , &apos;Step&apos;) )</errorConditionFormula>
+        <errorMessage>If Schedule Calculation Type = Step, You can Not Pick Commission Year* Payment Methods</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Team_vs_PayToAll</fullName>
+        <active>true</active>
+        <errorConditionFormula>AND( Pay_All_Team_Members__c , !Team__c )</errorConditionFormula>
+        <errorMessage>You not have Pay To All Member True with Team equals FALSE.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Team_vs_Schedule</fullName>
+        <active>true</active>
+        <errorConditionFormula>AND( Team__c ,  ISPICKVAL( Team_Payment_Method__c , &apos;Individual Contribution&apos;) , ISPICKVAL( Commission_Attainment_Schedule__r.Calculation_Type__c , &apos;Step&apos;) )</errorConditionFormula>
+        <errorMessage>The selected schedule configuration is not compatible with current Team configuration.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Team_vs_Total_Team_Contribution</fullName>
+        <active>true</active>
+        <errorConditionFormula>AND(!Team__c ,  CONTAINS( TEXT(Team_Payment_Method__c ) , &apos;Total Team&apos;)  )</errorConditionFormula>
+        <errorMessage>You can not have Payment Method of Total Team Contribution with team equals false.</errorMessage>
+    </validationRules>
+    <visibility>Public</visibility>
+</CustomObject>

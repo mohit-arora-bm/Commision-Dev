@@ -1,0 +1,27 @@
+.THIS .LookupCmp{
+    position: relative;
+    top: 5px;
+}
+.THIS .quoteTempConfigDiv {
+    max-height: 400px;
+    width: 100%;
+}
+.THIS .disabled{
+    pointer-events: none !important;
+    opacity: 0.7 !important;
+}
+.THIS .toggleBtn .slds-checkbox_faux_container .slds-checkbox_on{
+    display: none !important;
+}
+.THIS .toggleBtn .slds-checkbox_faux_container .slds-checkbox_off{
+    display: none !important;
+}
+.THIS .positionFix {
+    position: relative;
+    top: 20px;
+}
+.THIS .helptextPosition {
+    position: relative;
+    top: 20px;
+    right: 1px;
+}

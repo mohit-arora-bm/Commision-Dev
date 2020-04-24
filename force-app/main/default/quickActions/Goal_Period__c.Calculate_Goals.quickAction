@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <height>250</height>
+    <label>Calculate Goals</label>
+    <lightningComponent>agileComp__AC_CalculateGoal</lightningComponent>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
+    <type>LightningComponent</type>
+    <width>-100</width>
+</QuickAction>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Commission Period</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Commission Periods</value>
+    </caseValues>
+    <fields>
+        <label><!-- Commission Year End --></label>
+        <name>Commission_Year_End__c</name>
+    </fields>
+    <fields>
+        <label><!-- Commission Year Start --></label>
+        <name>Commission_Year_Start__c</name>
+    </fields>
+    <fields>
+        <help><!-- Date Period ENds --></help>
+        <label><!-- Date End --></label>
+        <name>dateEnd__c</name>
+    </fields>
+    <fields>
+        <help><!-- Date Period Starts --></help>
+        <label><!-- Date Start --></label>
+        <name>dateStart__c</name>
+    </fields>
+    <fields>
+        <help><!-- Shows whether the commission period is active --></help>
+        <label><!-- Active --></label>
+        <name>isActive__c</name>
+    </fields>
+    <layouts>
+        <layout>Commission Period Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <quickActions>
+        <label><!-- Run --></label>
+        <name>Run</name>
+    </quickActions>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Start date should be less than End Date --></errorMessage>
+        <name>Start_End_Date</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Commission Year Start date should be less than Commission Year End date --></errorMessage>
+        <name>Year_Start_End_Date</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- The selected dates are not valid --></errorMessage>
+        <name>Year_Validation</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Period  date must lie in Commission Year --></errorMessage>
+        <name>Year_vs_Period</name>
+    </validationRules>
+</CustomObjectTranslation>

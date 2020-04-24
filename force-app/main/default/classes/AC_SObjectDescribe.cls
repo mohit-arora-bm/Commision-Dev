@@ -73,7 +73,7 @@ public with sharing class AC_SObjectDescribe {
         if(result == null){
             result = wrappedFields.get(fieldName+'Id', implyNamespace); //in case it's a standard lookup in cross-object format
         }
-        System.debug(result);
+
         return result;
     }
     
@@ -97,7 +97,6 @@ public with sharing class AC_SObjectDescribe {
      * Returns the raw Schema.DescribeSObjectResult an AC_SObjectDescribe instance wraps.
     **/
     public Schema.DescribeSObjectResult getDescribe(){
-        System.debug(describe);
         return describe;
     }
     /**

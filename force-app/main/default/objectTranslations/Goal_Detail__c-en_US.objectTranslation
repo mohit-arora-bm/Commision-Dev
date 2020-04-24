@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Goal Detail</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Goal Details</value>
+    </caseValues>
+    <fields>
+        <label><!-- Commission Sales Rep --></label>
+        <name>Commission_Sales_Rep__c</name>
+        <relationshipLabel><!-- Goal Details --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- GP Goal --></label>
+        <name>GP_Goal__c</name>
+    </fields>
+    <fields>
+        <label><!-- Goal Period --></label>
+        <name>Goal_Period__c</name>
+        <relationshipLabel><!-- Goal Details --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Last Date Calculated --></label>
+        <name>Last_Date_Calculated__c</name>
+    </fields>
+    <fields>
+        <label><!-- Most Recent Doc Date --></label>
+        <name>Most_Recent_Doc_Date__c</name>
+    </fields>
+    <fields>
+        <label><!-- Rev Goal --></label>
+        <name>Rev_Goal__c</name>
+    </fields>
+    <fields>
+        <label><!-- SalesPeriod --></label>
+        <name>SalesPeriod__c</name>
+    </fields>
+    <fields>
+        <label><!-- Split Ext GP --></label>
+        <name>Split_Ext_GP__c</name>
+    </fields>
+    <fields>
+        <label><!-- Split Ext Sales --></label>
+        <name>Split_Ext_Sales__c</name>
+    </fields>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

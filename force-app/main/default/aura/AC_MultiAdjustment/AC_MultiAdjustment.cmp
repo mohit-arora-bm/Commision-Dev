@@ -1,0 +1,70 @@
+<aura:component implements="force:appHostable" controller="AC_MultiAdjustmentController">
+    <aura:attribute name="periodId" type="String"/>
+    <aura:attribute name="periodName" type="String"/>
+    <!-- <aura:attribute name="newAdj" type="Object"/> -->
+    <aura:attribute name="employees" type="List" default="[]"/>
+    <aura:attribute name="adjList" type="List" default="[]"/>
+    <aura:attribute name="types" type="List"/>
+    <aura:attribute name="adjTypes" type="List"/>
+    <!-- <aura:handler name="change" value="{!v.period}" action="{!c.periodChange}"/> -->
+    <!-- <aura:handler name="change" value="{!v.newAdj}" action="{!c.newAdj}"/> -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <lightning:spinner alternativeText="Loading" size="medium" class="templateConfigSpinner slds-hide" aura:id="Spinner"/>
+    <c:AC_DataService aura:id="dataService" />
+    <div class="outerDiv">
+        <lightning:layout horizontalAlign="space">
+            <lightning:layoutItem padding="around-medium" size="6">
+                <!-- <c:AC_DynamicRecordLookup objectAPIName="agileComp__CommissionPeriod__c" selectedRecord="{!v.period}" label="Select Period"/> -->
+                <lightning:input name="period" disabled="true" value="{!v.periodName}" label="Active Period" />
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-medium" size="6">
+                <aura:if isTrue="{!and (!empty(v.periodId), !empty(v.employees)) }">
+                    <lightning:button variant="brand" label="Post" title="Post" onclick="{! c.post }" class="slds-m-around--medium" type="submit"/>
+                </aura:if>
+            </lightning:layoutItem>
+        </lightning:layout>
+
+        <aura:if isTrue="{!and (!empty(v.periodId), !empty(v.employees)) }">
+            <lightning:layout>
+                <lightning:layoutItem size="2" padding="around-small">Employee</lightning:layoutItem>
+                <lightning:layoutItem size="2" padding="around-small">Type</lightning:layoutItem>
+                <lightning:layoutItem size="2" padding="around-small">Adjustment Type</lightning:layoutItem>
+                <lightning:layoutItem size="2" padding="around-small">Amount</lightning:layoutItem>
+                <lightning:layoutItem size="2" padding="around-small">Note</lightning:layoutItem>
+                <lightning:layoutItem size="2" padding="around-small"></lightning:layoutItem>
+            </lightning:layout>
+            <aura:iteration items="{!v.adjList}" var="adj" indexVar="rowNo">
+                <lightning:recordEditForm
+                    objectApiName="agileComp__commissionAdjustmentDetail__c">
+                    <lightning:layout>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            <lightning:combobox name="general" label="Employee" placeholder="Select an Option" options="{! v.employees }" value="{!adj.agileComp__Commission_Employee_Attained_Value_Recor__c}" required="true" variant="label-hidden"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            <lightning:inputField fieldName="agileComp__Type__c" value="{!adj.agileComp__Type__c}" required="true" variant="label-hidden"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            <lightning:inputField fieldName="agileComp__Adjustment_Type__c" value="{!adj.agileComp__Adjustment_Type__c}" required="true" variant="label-hidden"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            <lightning:inputField fieldName="agileComp__Adjustment_Amount__c" value="{!adj.agileComp__Adjustment_Amount__c}" required="true" variant="label-hidden"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            <lightning:inputField fieldName="agileComp__Adjustment_Description__c" value="{!adj.agileComp__Adjustment_Description__c}" required="true" variant="label-hidden"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            <aura:if isTrue="{!v.adjList.length > 1}">
+                                <lightning:buttonIcon iconName="utility:ban" class="banIcon pointer slds-m-around--medium" variant="bare" size="large" onclick="{!c.removeDataRow}" alternativeText="close" name="{!rowNo}"/>
+                                
+                            </aura:if>
+                            <lightning:buttonIcon iconName="utility:new" class="newIcon pointer slds-m-around--medium" variant="bare" size="large" onclick="{!c.addDataRow}" alternativeText="add" name="{!rowNo}"/>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </lightning:recordEditForm>
+            </aura:iteration>
+            
+        </aura:if>
+    </div>
+        
+</aura:component>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Commission Employee Attained Detail</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Commission Employee Attained Detail</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- EAD Attainment Form --></label>
+        <name>EAD_Attainment_Form</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- EAD_CommStmtFieldSet --></label>
+        <name>EAD_CommStmtFieldSet</name>
+    </fieldSets>
+    <fields>
+        <label><!-- Comm Attained --></label>
+        <name>Comm_Attained__c</name>
+    </fields>
+    <fields>
+        <label><!-- Commission Attainment Schedule Item --></label>
+        <name>Commission_Attainment_Schedule_Item__c</name>
+        <relationshipLabel><!-- Commission Employee Attained Detail --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Commission Employee Attained Value --></label>
+        <name>Commission_Employee_Attained_Value__c</name>
+        <relationshipLabel><!-- Commission Employee Attained Detail --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- From --></label>
+        <name>From__c</name>
+    </fields>
+    <fields>
+        <label><!-- GP Adjust --></label>
+        <name>GP_Adjust__c</name>
+    </fields>
+    <fields>
+        <label><!-- GP Earned --></label>
+        <name>GP_Earned__c</name>
+    </fields>
+    <fields>
+        <label><!-- Original Percent --></label>
+        <name>Original_Percent__c</name>
+    </fields>
+    <fields>
+        <label><!-- Override Percent --></label>
+        <name>Override_Percent__c</name>
+    </fields>
+    <fields>
+        <label><!-- Schedule Item --></label>
+        <name>Schedule_Item__c</name>
+    </fields>
+    <fields>
+        <label><!-- To --></label>
+        <name>To__c</name>
+    </fields>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

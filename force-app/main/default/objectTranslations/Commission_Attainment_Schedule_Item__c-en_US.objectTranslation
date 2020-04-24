@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Commission Attainment Schedule Item</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Commission Attainment Schedule Items</value>
+    </caseValues>
+    <fields>
+        <help><!-- Beginning Tier Value --></help>
+        <label><!-- Amount From --></label>
+        <name>Amount_From__c</name>
+    </fields>
+    <fields>
+        <help><!-- Upper Value of Tier --></help>
+        <label><!-- Amount To --></label>
+        <name>Amount_To__c</name>
+    </fields>
+    <fields>
+        <help><!-- Scehdule this item is associated with --></help>
+        <label><!-- Commission Attainment Schedule --></label>
+        <name>Commission_Attainment_Schedule__c</name>
+        <relationshipLabel><!-- Commission Attainment Schedule Items --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- Percent to be recognized for attaining this tier --></help>
+        <label><!-- Percent --></label>
+        <name>Percent__c</name>
+    </fields>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

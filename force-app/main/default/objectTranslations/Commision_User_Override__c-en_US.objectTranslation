@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Commission User Override</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Commission User Overrides</value>
+    </caseValues>
+    <fields>
+        <help><!-- Is this override active --></help>
+        <label><!-- Active --></label>
+        <name>Active__c</name>
+    </fields>
+    <fields>
+        <help><!-- Begin date for this override --></help>
+        <label><!-- Begin Date --></label>
+        <name>Begin_Date__c</name>
+    </fields>
+    <fields>
+        <help><!-- When selected, this allows the better of the override or the calculation from base commission Attainment schedule. Note this does not check against original sales team attainment schedule and any overridden attainment schedule. --></help>
+        <label><!-- Best Of --></label>
+        <name>Best_Of__c</name>
+    </fields>
+    <fields>
+        <help><!-- Override employees attainment schedule that the team they reside on attains and use this attainment schedule instead.  Note, dollars will still aggregate to their assigned team, just individual dollars will run through this attainment schedule. --></help>
+        <label><!-- Commission Attainment Schedule Override --></label>
+        <name>Commission_Attainment_Schedule_Override__c</name>
+        <relationshipLabel><!-- Commission User Overrides --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- A value in this box and in conjunction with Best Of checkbox will set an override percentage on the commission employee attained value record thus guaranteeing a specific percent value irregardless of actual attainment schedule --></help>
+        <label><!-- Commission Percent Override --></label>
+        <name>Commission_Percent_Override__c</name>
+    </fields>
+    <fields>
+        <help><!-- Allows to provide a base payment for a commission period no matter what actual attainment is.  Combined with best of checkbox will determine if this is absolute or based on attainment --></help>
+        <label><!-- Commission Period Payout --></label>
+        <name>Commission_Period_Payout__c</name>
+    </fields>
+    <fields>
+        <help><!-- Represents the sales rep that this override is associated with --></help>
+        <label><!-- Commission Sales Rep --></label>
+        <name>Commission_Sales_Rep__c</name>
+        <relationshipLabel><!-- Commission User Overrides --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- End Date for this override --></help>
+        <label><!-- End Date --></label>
+        <name>End_Date__c</name>
+    </fields>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- At least one of the override should present --></errorMessage>
+        <name>Atleast_One</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Can only have either a period payout or a percent override not both. --></errorMessage>
+        <name>Single_Style_Override</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- The selected schedule configuration is not compatible with current Team configuration. --></errorMessage>
+        <name>Team_vs_Schedule</name>
+    </validationRules>
+</CustomObjectTranslation>

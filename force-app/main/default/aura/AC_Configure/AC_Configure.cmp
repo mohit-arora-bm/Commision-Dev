@@ -1,0 +1,13 @@
+<aura:component implements="lightning:isUrlAddressable" controller="AC_ConfigureController">
+    
+    <aura:attribute name="message" type="String"/>
+    <aura:attribute name="needDeConfigure" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <c:AC_DataService aura:id="dataService" />
+    <lightning:spinner alternativeText="Loading" size="medium" class="slds-hide" aura:id="Spinner"/>
+    <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" role="alert">
+        <h2>{!v.message}</h2>
+    </div>
+
+    <lightning:button name="deConfigure" label="deConfigure" onclick="{!c.deConfigure}" disabled="{!!v.needDeConfigure}"/>
+</aura:component>

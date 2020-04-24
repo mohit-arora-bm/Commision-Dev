@@ -1,0 +1,9 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader" controller="AC_PDFAccessController">
+    <aura:attribute name="selectedPeriod" type="sObject"/> 
+    <aura:attribute name="includeDetails" type="Boolean" default="false"/>
+    <c:AC_DataService aura:id="dataService" />
+    <lightning:navigation aura:id="navService"/>
+    <c:AC_DynamicRecordLookup objectAPIName="agileComp__CommissionPeriod__c" label="Select Period" selectedRecord="{!v.selectedPeriod}"/>
+    <lightning:input type="checkbox" label="Include Details" name="Include Details" checked="{!v.includeDetails}"/>
+    <lightning:button variant="brand" label="Proceed" title="Proceed" onclick="{! c.proceed }" class="slds-float--right"/>
+</aura:component>

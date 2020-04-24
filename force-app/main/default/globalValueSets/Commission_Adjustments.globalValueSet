@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Gift Certificate.</fullName>
+        <default>false</default>
+        <label>Gift Certificate.</label>
+    </customValue>
+    <customValue>
+        <fullName>Misc GP Adjustment</fullName>
+        <default>false</default>
+        <label>Misc GP Adjustment</label>
+    </customValue>
+    <customValue>
+        <fullName>Previous Month Carryover</fullName>
+        <default>false</default>
+        <label>Previous Month Carryover</label>
+    </customValue>
+    <customValue>
+        <fullName>Draws</fullName>
+        <default>false</default>
+        <label>Draws</label>
+    </customValue>
+    <customValue>
+        <fullName>Overrides</fullName>
+        <default>false</default>
+        <label>Overrides</label>
+    </customValue>
+    <customValue>
+        <fullName>Misc Adjustment</fullName>
+        <default>false</default>
+        <label>Misc Adjustment</label>
+    </customValue>
+    <customValue>
+        <fullName>Rescind</fullName>
+        <default>false</default>
+        <label>Rescind</label>
+    </customValue>
+    <customValue>
+        <fullName>Sales Mgmt Comm ADj</fullName>
+        <default>false</default>
+        <label>Sales Mgmt Comm ADj</label>
+    </customValue>
+    <description>Commission Admustments</description>
+    <masterLabel>Commission Adjustments</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

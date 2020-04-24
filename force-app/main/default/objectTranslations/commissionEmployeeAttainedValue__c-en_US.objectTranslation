@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Commission Employee Attained Value</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Commission Employee Attained Values</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- EAV Attainment Form --></label>
+        <name>EAV_Attainment_Form</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- EAV Attainment Form Extra Fields --></label>
+        <name>EAV_Attainment_Form_Extra_Fields</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- EAV_CommStmtFieldSet --></label>
+        <name>EAV_CommStmtFieldSet</name>
+    </fieldSets>
+    <fields>
+        <help><!-- Adjusted Commission Attainment --></help>
+        <label><!-- Adjusted Commission Attainment --></label>
+        <name>Adjusted_Commission_Attainment__c</name>
+    </fields>
+    <fields>
+        <help><!-- Adjusted Gross Profit --></help>
+        <label><!-- Adjusted Gross Profit --></label>
+        <name>Adjusted_Gross_Profit__c</name>
+    </fields>
+    <fields>
+        <help><!-- User Override best off --></help>
+        <label><!-- Best of --></label>
+        <name>Best_of__c</name>
+    </fields>
+    <fields>
+        <label><!-- Calculation Type --></label>
+        <name>Calculation_Type__c</name>
+        <picklistValues>
+            <masterLabel>Step</masterLabel>
+            <translation><!-- Step --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Tier Attained</masterLabel>
+            <translation><!-- Tier Attained --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <help><!-- Total Commission Adjustments for this time frame and Sale Rep --></help>
+        <label><!-- Commission Adjustments --></label>
+        <name>Commission_Adjustments__c</name>
+    </fields>
+    <fields>
+        <label><!-- Commission Attainment Schedule --></label>
+        <name>Commission_Attainment_Schedule__c</name>
+        <relationshipLabel><!-- Commission Employee Attained Values --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Commission Period Payout --></label>
+        <name>Commission_Period_Payout__c</name>
+    </fields>
+    <fields>
+        <help><!-- Commission Period that record is associated with --></help>
+        <label><!-- Commission Period --></label>
+        <lookupFilter>
+            <errorMessage><!-- Commission Period Selected must be active --></errorMessage>
+        </lookupFilter>
+        <name>Commission_Period__c</name>
+        <relationshipLabel><!-- Commission Employee Attained Values --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- Sales Rep Associated with this Attainment --></help>
+        <label><!-- Commission Sales Rep --></label>
+        <name>Commission_Sales_Rep__c</name>
+        <relationshipLabel><!-- Commission Employee Attained Values --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Commission Team --></label>
+        <name>Commission_Team__c</name>
+        <relationshipLabel><!-- Commission Employee Attained Values --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Created From Team --></label>
+        <name>Created_From_Team__c</name>
+    </fields>
+    <fields>
+        <help><!-- Gross Profit Adjustment Summary from Detail Table --></help>
+        <label><!-- GP Adjustments --></label>
+        <name>GP_Adjustments__c</name>
+    </fields>
+    <fields>
+        <label><!-- Original Commission Attained --></label>
+        <name>Original_Commission_Attained__c</name>
+    </fields>
+    <fields>
+        <label><!-- Original Freight Cost --></label>
+        <name>Original_Freight_Cost__c</name>
+    </fields>
+    <fields>
+        <label><!-- Original GP Dollars --></label>
+        <name>Original_GP_Dollars__c</name>
+    </fields>
+    <fields>
+        <help><!-- Original Revenue Achieved during the period --></help>
+        <label><!-- Original Revenue Dollars --></label>
+        <name>Original_Revenue__c</name>
+    </fields>
+    <fields>
+        <label><!-- Original Total Cost --></label>
+        <name>Original_Total_Cost__c</name>
+    </fields>
+    <fields>
+        <label><!-- Overridden Attainment Percentage --></label>
+        <name>Overridden_Attainment_Percentage__c</name>
+    </fields>
+    <fields>
+        <label><!-- Pay All Team Members --></label>
+        <name>Pay_All_Team_Members__c</name>
+    </fields>
+    <fields>
+        <label><!-- Team Cost Attained --></label>
+        <name>Team_Cost_Attained__c</name>
+    </fields>
+    <fields>
+        <label><!-- Team Freight Cost Attained --></label>
+        <name>Team_Freight_Cost_Attained__c</name>
+    </fields>
+    <fields>
+        <label><!-- Team GP Adjustment --></label>
+        <name>Team_GP_Adjustment__c</name>
+    </fields>
+    <fields>
+        <label><!-- Team Name --></label>
+        <name>Team_Name__c</name>
+    </fields>
+    <fields>
+        <label><!-- Team Original GP Dollars --></label>
+        <name>Team_Original_GP_Dollars__c</name>
+    </fields>
+    <fields>
+        <label><!-- Team Payment Method --></label>
+        <name>Team_Payout_Method__c</name>
+        <picklistValues>
+            <masterLabel>Commission Year Individual Period Payout Step</masterLabel>
+            <translation><!-- Commission Year Individual Period Payout Step --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Commission Year Individual Period Payout Tier</masterLabel>
+            <translation><!-- Commission Year Individual Period Payout Tier --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Commission Year Total Team Period Payout Step</masterLabel>
+            <translation><!-- Commission Year Total Team Period Payout Step --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Commission Year Total Team Period Payout Tier</masterLabel>
+            <translation><!-- Commission Year Total Team Period Payout Tier --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Individual Contribution</masterLabel>
+            <translation><!-- Individual Contribution --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Total Team Contribution</masterLabel>
+            <translation><!-- Total Team Contribution --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Team Revenue Attained --></label>
+        <name>Team_Revenue_Attained__c</name>
+    </fields>
+    <fields>
+        <label><!-- Year Freight Cost --></label>
+        <name>Year_Freight_Cost__c</name>
+    </fields>
+    <fields>
+        <label><!-- Year GP Adjustments --></label>
+        <name>Year_GP_Adjustments__c</name>
+    </fields>
+    <fields>
+        <label><!-- Year Original GP Dollars --></label>
+        <name>Year_Original_GP_Dollars__c</name>
+    </fields>
+    <fields>
+        <label><!-- Year Original Revenue --></label>
+        <name>Year_Original_Revenue__c</name>
+    </fields>
+    <fields>
+        <label><!-- Year Original Total Cost --></label>
+        <name>Year_Original_Total_Coast__c</name>
+    </fields>
+    <fields>
+        <label><!-- Year Team Cost Attained --></label>
+        <name>Year_Team_Cost_Attained__c</name>
+    </fields>
+    <fields>
+        <label><!-- Year Team Freight Cost Attained --></label>
+        <name>Year_Team_Freight_Cost_Attained__c</name>
+    </fields>
+    <fields>
+        <label><!-- Year Team GP Adjustment --></label>
+        <name>Year_Team_GP_Adjustment__c</name>
+    </fields>
+    <fields>
+        <label><!-- Year Team Original GP Dollars --></label>
+        <name>Year_Team_Original_GP_Dollars__c</name>
+    </fields>
+    <fields>
+        <label><!-- Year Team Revenue Attained --></label>
+        <name>Year_Team_Revenue_Attained__c</name>
+    </fields>
+    <layouts>
+        <layout>Commission Employee Attained Value Layout</layout>
+        <sections>
+            <label><!-- Attainment Values --></label>
+            <section>Attainment Values</section>
+        </sections>
+        <sections>
+            <label><!-- Commission Info --></label>
+            <section>Commission Info</section>
+        </sections>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- User Override Info --></label>
+            <section>User Override Info</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

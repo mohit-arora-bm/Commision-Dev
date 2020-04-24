@@ -1,0 +1,152 @@
+<aura:component implements="force:appHostable" controller="TemplateDataLoaderController" access="global" >
+
+    <aura:attribute name="headers" type="List"  />
+    <aura:attribute name="errorCSV" type="String" default=""  />
+    <aura:attribute name="headMapWithRequired" type="Object"  />
+    <aura:attribute name="errorCSVString" type="String" default=""  />
+    <aura:attribute name="successfulRecords" type="List"  />
+    <aura:attribute name="successRecordCount" type="Integer" default="0"  />
+    <aura:attribute name="errorRecordCount" type="Integer" default="0"  />
+    <aura:attribute name="indexToCheck" type="Integer" default="0"  />
+    <aura:attribute name="isInProgress" type="Boolean" default="false" />
+    <aura:attribute name="progress" type="Integer" default="0"  />
+    <aura:attribute name="actualTotalLength" type="Integer" default="0"  />
+    <aura:attribute name="totalLength" type="Integer" default="0"  />
+    <aura:attribute name="TableContent" type="String"  />
+    <aura:attribute name="allOrNone" type="Boolean" default="false" />
+    <aura:attribute name="displaySpinner" type="Boolean" default="false" />
+    <aura:attribute name="selectedTemplateObject" type="String"  />
+    <aura:attribute name="selectedFieldsList" type="object[]"  />
+    <aura:attribute name="toPreview" type="boolean"  />
+    <aura:attribute name="file" type="object"  />
+    <aura:attribute name="headersMap" type="object"  />
+    <aura:attribute name="fileContentData" type="List"  />
+    <aura:attribute name="indices" type="list"  />
+    <aura:attribute name="onUpload" type="boolean" default="false" />
+    <aura:attribute name="headersfieldNamesWithType" type="object"  />
+    <aura:attribute name="headersfieldNames" type="list"  />
+    <aura:attribute name="showMain" type="Boolean" default="false"/>
+    <aura:attribute name="filename" type="String" />
+    <aura:attribute name="templateName" type="String" />
+    <aura:attribute name="NumOfRecords" type="Integer"/>
+
+    <!-- Data Service -->
+    <c:AQ_DataService aura:id="dataService" />
+    
+    <aura:handler name="lookupEvent" event="c:AQ_LookupEvent" action="{! c.onChangeTemplate }"/>
+
+    <aura:if isTrue="{!v.displaySpinner}">
+		<lightning:spinner alternativeText="Loading" size="large" />
+    </aura:if>
+
+    <!-- Progress Bar in Modal -->
+    <aura:if isTrue="{! v.isInProgress }">
+        <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div><span><b>{! v.successRecordCount } Records Successfully Uploaded...</b></span><span style="float:right"><b>Error in {! v.errorRecordCount } Records...</b></span></div>
+                    <p> <lightning:progressBar value="{! v.progress }"/> </p>
+                </div>
+            </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+    <article class=" slds-card" >
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container " title="Batch Import Data">
+                        <lightning:icon iconName="utility:settings" alternativeText="Batch Import Data" />
+                    </span>
+                </div>
+                <div class="slds-media__body">
+                    <h1  class="slds-page-header__title slds-truncate slds-align-middle" title="Batch Import Data">Batch Import Data</h1>
+                </div>
+            </header>
+        </div>
+        <div class="slds-card__body" >
+            <div class=" slds-box slds-scrollable CardBoardCSS" >
+                <div class="slds-form-element">
+                    <div class="slds-form-element__control">    
+                        <lightning:layout>
+                            <lightning:layoutItem padding="around-small" size="1" smallDeviceSize="6" mediumDeviceSize="3" largeDeviceSize="3" flexibility="auto">
+                                <div class="LookupCmp">
+                                    <c:AQ_LookupComponent lookupIcon="standard:template" displayLabel="Templates" objectApiName="agileComp__AQ_Data_Loader_Template__c" fieldApiName="Name"/>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem padding="around-small" size="1" smallDeviceSize="6" mediumDeviceSize="3" largeDeviceSize="3" flexibility="auto">
+                                <lightning:input type="file" label='Import' accept=".csv" id="file-upload-input-01" disabled="{! empty(v.selectedTemplateObject) }" onchange="{! c.onChangeImportFile }" multiple="false" />
+                            </lightning:layoutItem>
+                            <lightning:layoutItem padding="around-small" size="1" smallDeviceSize="6" mediumDeviceSize="3" largeDeviceSize="3" flexibility="auto">
+                                <div class="slds-truncate " >
+                                    <span> <lightning:helptext class="helptextPosition" content="The optional allOrNone parameter specifies whether the operation allows partial success. If you specify false for this parameter and a record fails, the remainder of the DML operation can still succeed. This method returns a result object that can be used to verify which records succeeded, which failed, and why. If the parameter is not set or is set true, an exception is thrown if the method is not successful." /> 
+                                    <lightning:input type="toggle" label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rollback on Error" class="toggleBtn" name="hideCheckboxColumn" onchange="{! c.onChangeAllOrNone }" /></span>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem padding="around-small" size="1" smallDeviceSize="6" mediumDeviceSize="3" largeDeviceSize="3" flexibility="auto">
+                                <div class="slds-truncate positionFix" >    
+                                    <lightning:button label="Upload" onclick="{! c.onUpload }" disabled="{! empty( v.headers ) }"/>
+                                </div>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+                </div>
+                <div class="slds-box">
+                    <lightning:layout multipleRows="true">
+                            <lightning:layoutItem padding="around-small" size="1" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" flexibility="auto">
+                                <div class="disabled">    
+                                    <aura:if isTrue="{!not(empty(v.selectedTemplateObject))}">
+                                        <c:AQ_DynamicObjectLookUp displayLabel='Object' aura:id="dynamicObjectLookup" selectedObject="{!v.selectedTemplateObject}" selectedObjectAPIName="{!v.selectedTemplateObject}"/>
+                                     <aura:set attribute="else">
+                                        <c:AQ_DynamicObjectLookUp displayLabel='Object' aura:id="dynamicObjectLookup" selectedObject="{!v.selectedTemplateObject}" selectedObjectAPIName="{!v.selectedTemplateObject}"/>
+                                     </aura:set>
+                                    </aura:if> 
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem padding="around-small" size="9" smallDeviceSize="9" mediumDeviceSize="9" largeDeviceSize="9" flexibility="auto">
+                                <aura:if isTrue="{! not( empty( v.selectedTemplateObject ) )}">
+                                    <aura:if isTrue="{! not(empty( v.headers )) }">    
+                                        <div class="slds-box CardBoardCSS">
+                                            <lightning:layout multipleRows="true">
+                                                <aura:iteration items="{! v.selectedFieldsList }" var="fld" indexVar="index">
+                                                    <lightning:layoutItem padding="around-small" size="6" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" flexibility="auto">
+                                                        <div id="{! fld.fieldAPIName }"><b>{! fld.fieldLabel }</b></div>
+                                                    </lightning:layoutItem>
+                                                    <lightning:layoutItem padding="around-small" size="6" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" flexibility="auto">
+                                                        <div class="slds-truncate" >
+                                                            <lightning:select aura:id="fieldMap" name="select1" label="Select Field" required="true"  value="{! fld.mappedHeader }" >
+                                                                    <option value="">choose one...</option>
+                                                                <aura:iteration items="{! v.headers }" var='fldVal'>
+                                                                    <option value="{! fldVal }">{! fldVal }</option>
+                                                                </aura:iteration>
+                                                            </lightning:select>
+                                                        </div>
+                                                    </lightning:layoutItem> 	
+                                                </aura:iteration>
+                                            </lightning:layout> 
+                                        </div>  
+                                        <aura:set attribute="else">
+                                                <span></span>
+                                         </aura:set>
+                                    </aura:if>      
+                                </aura:if>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                        <aura:if isTrue="{! v.toPreview }">
+                            <div class="slds-page-header">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <div align='center' class="slds-page-header__title slds-truncate" > FILE PREVIEW </div>
+                                    </h1>
+                                </div>
+                            </div>
+                            <div class="slds-box quoteConfig"> 
+                                <ui:outputRichText class="uiOutputRichText slds-m--around-large" value="{!v.TableContent}"/>
+                            </div>
+                        </aura:if>
+                </div>
+            </div>
+        </div>
+    </article>
+</aura:component>

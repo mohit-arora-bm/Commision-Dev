@@ -1,0 +1,170 @@
+<aura:component implements="force:appHostable" controller="AC_EmployeeAdjustmentItems">
+    <aura:attribute name="periodList" type="List"/> 
+    <aura:attribute name="employeeList" type="List"/> 
+    <aura:attribute name="eavList" type="List"/>
+    <aura:attribute name="eadList" type="List"/>
+    <aura:attribute name="adjList" type="List"/>
+    <aura:attribute name="teamAdjList" type="List"/>
+    <aura:attribute name="deleteAdjList" type="List"/>
+    <aura:attribute name="eavColumns" type="List"/>
+    <aura:attribute name="allEavDataList" type="List"/>
+    <aura:attribute name="eadColumns" type="List"/> 
+    <aura:attribute name="adjColumns" type="List"/>
+    <aura:attribute name="teamAdjColumns" type="List"/>
+    
+    <aura:attribute name="period" type="String"/>
+    <aura:attribute name="teamId" type="String"/>
+    <aura:attribute name="employee" type="String"/>
+    <aura:attribute name="errors" type="Object" default="[]"/>
+    <aura:attribute name="newAdj" type="Object" default="[]"/>
+    <!-- <aura:attribute name="eavdraftValues" type="Map"/>
+    <aura:attribute name="eaddraftValues" type="Map"/> -->
+    <aura:attribute name="adjdraftValues" type="Map"/>
+    <aura:attribute name="hasChanges" type="Boolean" default="false"/>
+    <aura:attribute name="showError" type="Boolean" default="false"/>
+    <aura:handler name="refreshEmp" event="c:AC_DataRowEvent" action="{! c.getRec }"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.newAdj}" action="{!c.adjRowEdit}"/>
+    <!-- Lightning Spinner -->
+    <lightning:spinner alternativeText="Loading" size="medium" aura:id="Spinner"/>
+    <!-- Data Service --> 
+    <c:AC_DataService aura:id="dataService" />
+    <lightning:navigation aura:id="navService"/>
+    <div class="outerDiv">
+    <lightning:layout>
+        <lightning:layoutItem padding="around-small">
+            <lightning:select name="period" label="Period" value="{!v.period}" required="true" aura:id="templateForm">
+                <option text="--None--" value=""/>
+                <aura:iteration items="{!v.periodList}" var="period">   
+                    <option text="{!period.Name}" value="{!period.Id}"/>
+                </aura:iteration>
+            </lightning:select>
+        </lightning:layoutItem>
+        
+        <lightning:layoutItem padding="around-small">
+            <lightning:select name="employee" label="Employee" value="{!v.employee}" aura:id="templateForm" required="true">
+                <option text="--None--" value=""/>
+                <aura:iteration items="{!v.employeeList}" var="employee">
+                    <option text="{!employee.Name}" value="{!employee.Id}"/>
+                </aura:iteration>
+            </lightning:select>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small">
+            <lightning:button variant="brand" label="Search" title="Search" onclick="{! c.getRec }" disabled="{!v.hasChanges}" class="slds-m-around--large"/>
+        </lightning:layoutItem>
+        <!-- <aura:if isTrue="{!v.hasChanges}"> -->
+            <lightning:layoutItem padding="around-small">
+                <lightning:button variant="brand" label="Save" title="Save" onclick="{! c.save }" disabled="{!!v.hasChanges}" class="slds-m-around--large"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small">
+                <lightning:button variant="brand" label="Cancel" title="Cancel" onclick="{! c.cancel }" disabled="{!!v.hasChanges}" class="slds-m-around--large"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small">
+                <aura:if isTrue="{!!empty(v.eavList)}">
+                    <lightning:button variant="brand" label="Generate PDF" title="Generate PDF" onclick="{! c.generatePDF }" disabled="{!v.hasChanges}" class="slds-m-around--large"/>
+                </aura:if>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small">
+                <lightning:button variant="brand" label="Import" title="Import" onclick="{! c.import }" class="slds-m-around--large"/>
+            </lightning:layoutItem>
+        <!-- </aura:if> -->
+    </lightning:layout>
+    <div>
+        <aura:if isTrue="{!v.hasChanges}">
+            * You have unsaved changes. Click Save for the current changes to take effect.
+        </aura:if>
+    </div>
+    <lightning:layout multipleRows="true" aura:id="mainDiv">
+        <aura:if isTrue="{!v.eavList.length > 0}">
+            <lightning:layoutItem size="12" padding="around-large">
+                <p class="slds-p-around--medium slds-text-title_caps" style="font-size: 1.5rem;"><strong>{!v.eavList[0].Name}</strong></p>
+                <lightning:datatable
+                    aura:id="eavTable"
+                    columns="{! v.eavColumns }"
+                    data="{! v.eavList }"
+                    keyField="Id"
+                    hideCheckboxColumn="true"
+                    oncellchange="{!c.oncellchange}"
+                    suppressBottomBar = "true"
+                />
+            </lightning:layoutItem>
+            
+            <aura:if isTrue="{!v.allEavDataList.length > 0}">
+                
+                <aura:iteration items="{!v.allEavDataList}" var="eavData">
+                    <lightning:layoutItem size="12" padding="around-large">
+                        <lightning:datatable
+                            aura:id="eavTable"
+                            columns="{!eavData.coloum }"
+                            data="{!eavData.eavDataList }"
+                            keyField="Id"
+                            hideCheckboxColumn="true"
+                            oncellchange="{!c.oncellchange}"
+                            suppressBottomBar = "true"
+                        />
+                    </lightning:layoutItem>
+                </aura:iteration>
+            </aura:if>    
+            <lightning:layoutItem size="12" padding="around-large">
+                <lightning:datatable
+                    aura:id="eadTable"
+                    columns="{! v.eadColumns }"
+                    data="{! v.eadList }"
+                    keyField="Id"
+                    hideCheckboxColumn="true"
+                    oncellchange="{!c.oncellchange}"
+                    suppressBottomBar = "true"
+                />
+            </lightning:layoutItem>
+            <lightning:button variant="neutral" label="Add Adjustment" title="Add Adjustment" onclick="{! c.addRow }" class="slds-m-around--large"/>
+            <lightning:button variant="neutral" label="Add Team Adjustment" title="Add Team Adjustment" onclick="{! c.addTeamAdjustment }" class="slds-m-around--large"/>
+            <aura:if isTrue="{!v.showError}">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                    <h2>Name, Amount, Adjustment Type are required and must have correct values.
+                    </h2>
+                </div>
+            </aura:if>
+            <aura:if isTrue = "{! v.adjList.length > 0 }">
+                <lightning:layoutItem size="12" padding="around-large">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01"><b>Individual Adjustment</b></label>
+                        <div class="slds-form-element__control">
+                            
+                                <lightning:datatable
+                                    aura:id="adjTable"
+                                    columns="{! v.adjColumns }"
+                                    data="{! v.adjList }"
+                                    keyField="Id"
+                                    errors="{! v.errors }"
+                                    hideCheckboxColumn="true"
+                                    suppressBottomBar = "true"
+                                    onrowaction="{! c.handleRowAction }"
+                                />
+                        </div>
+                    </div>
+                </lightning:layoutItem>
+            </aura:if>
+            <aura:if isTrue = "{! v.teamAdjList.length > 0 }">
+                <lightning:layoutItem size="12" padding="around-large">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="form-element-01"><b>Team Adjustment</b></label>
+                        <div class="slds-form-element__control">
+                            
+                                <lightning:datatable
+                                    aura:id="teamAdjTable"
+                                    columns="{! v.teamAdjColumns }"
+                                    data="{! v.teamAdjList }"
+                                    keyField="Id"
+                                    errors="{! v.errors }"
+                                    hideCheckboxColumn="true"
+                                    suppressBottomBar = "true"
+                                />
+                        </div>
+                    </div>
+                </lightning:layoutItem>
+            </aura:if>
+        </aura:if>
+    </lightning:layout>
+    <div aura:id="recordForm"></div>
+    </div>
+</aura:component>

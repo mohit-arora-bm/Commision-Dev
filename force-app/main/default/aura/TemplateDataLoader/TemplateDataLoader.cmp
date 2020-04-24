@@ -1,0 +1,93 @@
+<aura:component implements="force:appHostable" access="global" controller="TemplateDataLoaderController">
+	<aura:attribute name="templateId" type="String" default="" />
+	<aura:attribute name="templateName" type="String" />
+    <aura:attribute name="objectApiName" type="String" default="AQ_AgileQuoteTemplate__c" />
+    <aura:attribute name="displaySpinner" type="Boolean" default="false" />
+    <aura:attribute name="selectedTemplateObject" type="String" default="" />
+    <aura:attribute name="fieldsList" type="object[]"  />
+    <aura:attribute name="selectedFieldsList" type="object[]"  />
+    <aura:attribute name="deleteRecordId" type="String"/>
+
+	<aura:if isTrue="{!v.displaySpinner}">
+		<lightning:spinner alternativeText="Loading" size="large" />
+	</aura:if>
+
+	<!-- Data Service -->
+	<c:AQ_DataService aura:id="dataService" />
+
+	<!-- Init Handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="c:AQ_GenericEvent" action="{!c.handleRecordChange}"/>
+    <aura:handler event="c:AQ_ObjectChangeEvent" action="{!c.handleObjectChange}"/>
+
+	<div class="slds-box">
+        <div class="slds-box">
+            <div class="slds-page-header">
+                <span class="slds-truncate"><b class="headerClass">{! if( not( empty( v.templateName ) ), v.templateName, 'Data Loader Template' )} </b>
+                <span class="slds-float_right"><lightning:button class="buttonPosition" disabled="{! empty(v.selectedTemplateObject) }" label="Save" onclick="{! c.saveDataLoaderTemplate }"/></span></span>
+            </div>
+
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem padding="around-small" size="1" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" flexibility="auto">
+                    <div class="slds-truncate" >
+                        <lightning:input type="text" aura:id="input" label="Template Name" required="true" name="hideCheckboxColumn" value="{! v.templateName }"/>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="1" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" flexibility="auto">
+                <aura:if isTrue="{!not(empty(v.templateId))}">     
+                    <aura:if isTrue="{!not(empty(v.selectedTemplateObject))}">
+                        <div class="disable">
+                            <c:AQ_DynamicObjectLookUp aura:id="dynamicObjectLookup" selectedObject="{!v.selectedTemplateObject}" selectedObjectAPIName="{!v.selectedTemplateObject}"/>
+                        </div>
+                    <aura:set attribute="else">
+                        <c:AQ_DynamicObjectLookUp aura:id="dynamicObjectLookup" selectedObject="{!v.selectedTemplateObject}" selectedObjectAPIName="{!v.selectedTemplateObject}"/>
+                    </aura:set>
+                    </aura:if> 
+                <aura:set attribute="else">
+                    <c:AQ_DynamicObjectLookUp aura:id="dynamicObjectLookup" selectedObject="{!v.selectedTemplateObject}" selectedObjectAPIName="{!v.selectedTemplateObject}"/>
+                </aura:set>
+                </aura:if>           
+                    </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="9" smallDeviceSize="9" mediumDeviceSize="9" largeDeviceSize="9" flexibility="auto">
+                    <aura:if isTrue="{! and( not( empty( v.fieldsList ) ), v.selectedTemplateObject )}">
+                        <div class="slds-box CardBoardCSS">
+                            <lightning:layout multipleRows="true">
+                                <aura:iteration items="{! v.selectedFieldsList }" var="fld" indexVar="index">
+                                    <lightning:layoutItem padding="around-small" size="6" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" flexibility="auto">
+                                        <div class="slds-truncate" >
+                                            <lightning:select name="select1" label="Select Field" required="true" aura:id="input" value="{! fld.fieldAPIName }" onchange="{! c.onChangeField }">
+                                                    <option value="">choose one...</option>
+                                                <aura:iteration items="{! v.fieldsList }" var='fldVal'>
+                                                    <option value="{! fldVal.fieldAPIName }">{! fldVal.fieldLabel }</option>
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </div>
+                                    </lightning:layoutItem> 	
+                                    <lightning:layoutItem padding="around-small" size="3" smallDeviceSize="3" mediumDeviceSize="3" largeDeviceSize="3" flexibility="auto">
+                                        <div class="slds-truncate positionFix" >
+                                            <lightning:input type="toggle" label="Required" class="toggleBtn" name="hideCheckboxColumn" disabled="{! fld.isDisabled }" checked="{! fld.isRequired }"/>
+                                        </div>
+                                    </lightning:layoutItem> 
+                                    <lightning:layoutItem padding="around-small" size="1" smallDeviceSize="1" mediumDeviceSize="1" largeDeviceSize="1" flexibility="auto">
+                                        <div class="slds-truncate positionFix" >
+                                            <aura:if isTrue="{!index == 0}">
+                                                <center>
+                                                    <lightning:buttonIcon iconName="utility:new" class="newIcon pointer" variant="bare" size="large" onclick="{!c.addFieldRow}" name="{! fld.fieldAPIName }" alternativeText="new"/>
+                                                </center>
+                                                <aura:set attribute="else">
+                                                    <center>
+                                                        <lightning:buttonIcon iconName="utility:ban" disabled="{! fld.isDisabled }" class="banIcon pointer" variant="bare" size="large" onclick="{!c.removeFieldRow}" name="{! fld.fieldAPIName }" alternativeText="close"/>
+                                                    </center>
+                                                </aura:set>
+                                            </aura:if>                                                    
+                                        </div>
+                                    </lightning:layoutItem> 	
+                                </aura:iteration>
+                            </lightning:layout> 
+                        </div>        
+                    </aura:if>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>	
+	</div>
+</aura:component>

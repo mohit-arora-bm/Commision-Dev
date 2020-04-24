@@ -1,0 +1,10 @@
+.THIS .selected {
+    background-color: lavender !important;
+}
+.THIS .pointer {
+    cursor: pointer;
+}
+
+.THIS .tableDiv{
+    max-height:450px;
+}

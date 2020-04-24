@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Commission Attainment Schedule</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Commission Attainment Schedules</value>
+    </caseValues>
+    <fields>
+        <help><!-- Is this schedule active --></help>
+        <label><!-- Active --></label>
+        <name>Active__c</name>
+    </fields>
+    <fields>
+        <help><!-- Calculation Type - Step is each attainment level from 0 - Tier that percentage applies to those $ and the next tier for the span of that tier the percentage applies.  For Tier Attained, you receive the $ on that tier for the entire amount --></help>
+        <label><!-- Calculation Type --></label>
+        <name>Calculation_Type__c</name>
+        <picklistValues>
+            <masterLabel>Step</masterLabel>
+            <translation><!-- Step --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Tier Attained</masterLabel>
+            <translation><!-- Tier Attained --></translation>
+        </picklistValues>
+    </fields>
+    <layouts>
+        <layout>Commission Attainment Schedule Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

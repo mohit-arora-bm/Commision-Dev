@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Commission Team</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Commission Teams</value>
+    </caseValues>
+    <fields>
+        <help><!-- Whether sales team is active  Sales Team members should only reside in one sales team. --></help>
+        <label><!-- Active --></label>
+        <name>Active__c</name>
+    </fields>
+    <fields>
+        <help><!-- Attainment Schedule that team members will defaul to, team members can override this schedule in another object. --></help>
+        <label><!-- Commission Attainment Schedule --></label>
+        <name>Commission_Attainment_Schedule__c</name>
+        <relationshipLabel><!-- Commission Teams --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- Allow for another team to utilize this teams values (Example would be a division team for leader payouts) --></help>
+        <label><!-- Commission Team Rollup --></label>
+        <name>Commission_Team_Rollup__c</name>
+        <relationshipLabel><!-- Commission Teams --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- Pays all active team members regardless of contribution. --></help>
+        <label><!-- Pay All Team Members --></label>
+        <name>Pay_All_Team_Members__c</name>
+    </fields>
+    <fields>
+        <help><!-- In conjunction with Pay All Team Members, determines how to assign percentage to user, if Total Team Contribution use the total Dollars * Team Percent attained. if Individual use the individuals contribution * team Percent Attained. --></help>
+        <label><!-- Team Payment Method --></label>
+        <name>Team_Payment_Method__c</name>
+        <picklistValues>
+            <masterLabel>Commission Year Individual Period Payout Step</masterLabel>
+            <translation><!-- Commission Year Individual Period Payout Step --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Commission Year Individual Period Payout Tier</masterLabel>
+            <translation><!-- Commission Year Individual Period Payout Tier --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Commission Year Total Team Period Payout Step</masterLabel>
+            <translation><!-- Commission Year Total Team Period Payout Step --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Commission Year Total Team Period Payout Tier</masterLabel>
+            <translation><!-- Commission Year Total Team Period Payout Tier --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Individual Contribution</masterLabel>
+            <translation><!-- Individual Contribution --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Total Team Contribution</masterLabel>
+            <translation><!-- Total Team Contribution --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Team --></label>
+        <name>Team__c</name>
+    </fields>
+    <layouts>
+        <layout>Commission Team Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Can&apos;t have pay to all with Individual Payout --></errorMessage>
+        <name>PayToAll_vs_IndividualPayout</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- If Schedule Calculation Type = Step, You can Not Pick Commission Year* Payment Methods --></errorMessage>
+        <name>PaymentMethod_vs_Schedule</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- You not have Pay To All Member True with Team equals FALSE. --></errorMessage>
+        <name>Team_vs_PayToAll</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- The selected schedule configuration is not compatible with current Team configuration. --></errorMessage>
+        <name>Team_vs_Schedule</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- You can not have Payment Method of Total Team Contribution with team equals false. --></errorMessage>
+        <name>Team_vs_Total_Team_Contribution</name>
+    </validationRules>
+</CustomObjectTranslation>

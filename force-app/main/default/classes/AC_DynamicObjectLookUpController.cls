@@ -14,11 +14,12 @@ public class AC_DynamicObjectLookUpController {
             //ProcessInstance.TargetObjectId.getDescribe().getReferenceTo()
             List<Schema.SObjectType> sobjectTypeList = new List<Schema.SObjectType>(gd.values());
             for(Integer i = 0 ; i < sobjectTypeList.size() ; i++) {
-                
+                System.debug(sobjectTypeList[i]);
                 if( String.isNotBlank(searchText) && String.valueOf(sobjectTypeList[i]).startsWithIgnoreCase(searchText)){
                     Schema.DescribeSObjectResult describeResult = sobjectTypeList[i].getDescribe();
                     if( describeResult.isAccessible() && !describeResult.isCustomSetting() && describeResult.isQueryable()){
                         ObjectWrapper wrapperObj = new ObjectWrapper( describeResult.getLabel(), describeResult.getName() );
+                        System.debug(wrapperObj);
                         wrapperList.add(wrapperObj);
                     }  
                     if(wrapperList.size() == 10){
@@ -32,7 +33,9 @@ public class AC_DynamicObjectLookUpController {
             }else {
                 return NULL;        
             }
-        }catch(Exception ex){AuraHandledException exceptionMessage = new AuraHandledException(ex.getMessage()); exceptionMessage.setMessage(ex.getMessage()); throw exceptionMessage; }
+        }catch(Exception ex){
+            throw new AuraHandledException(ex.getMessage() + Label.AC_Error_Separator + ex.getStackTraceString());
+        }
     }
 
     public class ObjectWrapper {

@@ -7,8 +7,6 @@
     <aura:attribute name="rowNo" type="Integer"/>
     <aura:attribute name="selectedTemplateObject" type="String"  default="" description="Template object"/>
     <aura:attribute name="dataTypeMap" type="Map"/>
-    <aura:attribute name="onlyReferenceField"      type="List"     default=""/>
-    <!-- <aura:attribute name="lastSuccessDate" type="Datetime"/> -->
 
     <aura:handler event="c:AC_FieldSelectedEvt" name="AC_FieldSelectedEvt" action="{! c.handleFieldChange }"/>
 
@@ -100,12 +98,26 @@
                             <lightning:select label="Field Mapping" required="{! templateVal.apexDataType == 'CURRENCY' }" value="{! templateVal.mapping}" aura:id="templateForm">
                                 <option value="" selected="true">choose one...</option>
                                 <aura:iteration items="{!v.mappingFields}" var="field">
-                                    <aura:if isTrue="{! templateVal.apexDataType == field.displayType || (and(templateVal.apexDataType == 'ID',field.displayType == 'REFERENCE')) || (and((templateVal.apexDataType == 'DATETIME' || templateVal.apexDataType == 'DATE'), (field.displayType == 'DATE' || field.displayType == 'DATETIME'))) || (and(templateVal.dataType == 'number', (field.displayType == 'INTEGER' || field.displayType == 'DOUBLE' || field.displayType == 'CURRENCY')))}">
+                                    <aura:if isTrue="{! and(
+                                        (templateVal.apexDataType == field.displayType || 
+                                        (and(templateVal.apexDataType == 'ID',field.displayType == 'REFERENCE')) || 
+                                        (and((templateVal.apexDataType == 'DATETIME' || templateVal.apexDataType == 'DATE'), (field.displayType == 'DATE' || field.displayType == 'DATETIME'))) || 
+                                        (and(templateVal.dataType == 'number', (field.displayType == 'INTEGER' || field.displayType == 'DOUBLE' || field.displayType == 'CURRENCY')))), 
+                                        (field.displayType != 'REFERENCE' || field.relatedObjectName == templateVal.relatedObjectName || and(field.relatedObjectName == v.selectedTemplateObject, templateVal.apexDataType == 'ID' ) || templateVal.relatedObjectName == 'User') )}">
                                         <option value="{!field.value}">{!field.label}</option>
                                     </aura:if>
                                 </aura:iteration>
                             </lightning:select> 
                             <!-- </aura:if> -->
+                        </div>
+                        <div class="slds-col slds-size_3-of-12 column-Item-design">
+                            <aura:if isTrue="{! templateVal.apexDataType == 'CURRENCY' || templateVal.apexDataType == 'DOUBLE' || templateVal.apexDataType == 'INTEGER' }">
+                                <lightning:select label="Alter value" value="{! templateVal.mathFunc}" aura:id="templateForm">
+                                    <option value="" selected="true">choose one...</option>
+                                    <option value="Absolute" >Absolute</option>
+                                    <option value="Invert" >Invert</option>
+                                </lightning:select> 
+                            </aura:if>
                         </div>
                         <div class="slds-col slds-size_2-of-12 column-Item-design top-margin">
                             <aura:if isTrue="{!index == 0}">

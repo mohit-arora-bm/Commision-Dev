@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Goal Period</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Goal Periods</value>
+    </caseValues>
+    <fields>
+        <label><!-- From --></label>
+        <name>From__c</name>
+    </fields>
+    <fields>
+        <label><!-- Last Run Date --></label>
+        <name>Last_Run_Date__c</name>
+    </fields>
+    <fields>
+        <label><!-- To --></label>
+        <name>To__c</name>
+    </fields>
+    <layouts>
+        <layout>Goal Period Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <quickActions>
+        <label><!-- Calculate Goals --></label>
+        <name>Calculate_Goals</name>
+    </quickActions>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

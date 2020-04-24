@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="fire selected record id">
+	<aura:attribute name="selectedRecordId" type="String"/>
+	<aura:attribute name="selectedRecordName" type="String"/>
+</aura:event>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <formFactors>Small</formFactors>
+    <formFactors>Medium</formFactors>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <label>Sales</label>
+    <navType>Standard</navType>
+    <tabs>standard-home</tabs>
+    <tabs>standard-Opportunity</tabs>
+    <tabs>standard-Lead</tabs>
+    <tabs>standard-Task</tabs>
+    <tabs>standard-File</tabs>
+    <tabs>standard-Account</tabs>
+    <tabs>standard-Contact</tabs>
+    <tabs>standard-Campaign</tabs>
+    <tabs>standard-Dashboard</tabs>
+    <tabs>standard-report</tabs>
+    <tabs>standard-Event</tabs>
+    <tabs>standard-Case</tabs>
+    <tabs>standard-Forecasting3</tabs>
+    <tabs>CommissionPeriod__c</tabs>
+    <tabs>commissionSplit__c</tabs>
+    <tabs>standard-Quote</tabs>
+    <tabs>Commission_Team__c</tabs>
+    <tabs>Commision_User_Override__c</tabs>
+    <tabs>Commission_Attainment_Schedule__c</tabs>
+    <tabs>Commission_Sales_Rep__c</tabs>
+    <tabs>AQ_Data_Loader_Template__c</tabs>
+    <tabs>cflCustStruct__Transaction__c</tabs>
+    <tabs>cflCustStruct__Transaction_Line_Item__c</tabs>
+    <uiType>Lightning</uiType>
+</CustomApplication>

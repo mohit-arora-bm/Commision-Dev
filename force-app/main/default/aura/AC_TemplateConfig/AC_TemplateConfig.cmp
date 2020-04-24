@@ -7,10 +7,8 @@
     <aura:attribute name="selectedFilters"      type="List"     default="" />
     <aura:attribute name="fieldOptions"         type="List"     default="" />
     <aura:attribute name="allFieldOptions"      type="List"     default=""/>
-    <aura:attribute name="onlyReferenceField"      type="List"     default=""/>
-    <!-- <aura:attribute name="selectedFieldsList"   type="List"    default="[]"/>  -->
     <aura:attribute name="dataList"             type="List"    default="[]"/>
-    <aura:attribute name="mappingFields"        type="List"    default="[]"/>
+    <aura:attribute name="mappingFields"        type="List"    default="[]"/> 
     <aura:attribute name="selectedTemplateObject" type="String"  default="" description="Template object"/>
     <aura:attribute name="initCompleted" type="Boolean" default="false"/>
     <aura:attribute name="minColumnWidth" type="String" default="50"/>
@@ -21,7 +19,7 @@
                                                         {'label': 'All of the conditions are met(AND)', 'value': 'AND'},
                                                         {'label': 'All of the conditions are met(OR)', 'value': 'OR'},
                                                         {'label': 'Customize the logic', 'value': 'Custom'}]"/>
-    <aura:attribute name="vfHost" type="String"/>
+    <aura:attribute name="hasBatch" type="Boolean" default="false"/>
     <!-- Event Handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
     <aura:handler event="c:AC_ObjectChangeEvent" action="{!c.handleObjectChange}"/>
@@ -29,7 +27,7 @@
     <aura:handler name="cloneSectionEvent" event="c:AC_CloneSectionEvent" action="{! c.cloneDataRow }"/>
     <aura:registerEvent name="recordSelectEvent" type="c:AC_GenericControlRecordSelectEvt"/>
 
-    <iframe aura:id="vfFrame" src="{!v.vfHost + '/apex/SessionIdPage'}" class="slds-hide"/>
+    <!-- <iframe aura:id="vfFrame" src="{!v.vfHost + '/apex/SessionIdPage'}" class="slds-hide"/> -->
     <!-- Data Service -->
     <c:AC_DataService aura:id="dataService" />
 
@@ -39,7 +37,7 @@
             <!-- Lightning Spinner -->
             <lightning:spinner alternativeText="Loading" size="medium" class="templateConfigSpinner slds-hide" aura:id="Spinner"/>
             <aura:if isTrue="{!!empty(v.recordId)}">
-                <b> Last Successfull run date :</b> 
+                <b> Last Successful run date :</b> 
                 <lightning:formattedDateTime value="{!v.lastSuccessDate}" year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit" hour12="true"/>
             </aura:if>
             <aura:if isTrue="{!v.isScheduled}">
@@ -48,12 +46,19 @@
                     </h2>
                 </div>
             </aura:if>
+            
+            <aura:if isTrue="{!and(!empty(v.recordId),!v.hasBatch)}">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" role="alert">
+                    <h2>Newly created template may take upto 10 minutes from creation to be made available for use.
+                    </h2>
+                </div>
+            </aura:if>
             <div class="headerSection fullWidth inlineDisplay">
                 <p class="headerText" style="width: 80%;">
                     {!if(empty(v.recordId), 'New Template', 'Edit Template')}
                 </p>
                 <div>
-                    <aura:if isTrue="{!!empty(v.recordId)}">
+                    <aura:if isTrue="{!and(!empty(v.recordId),v.hasBatch)}">
                         <lightning:button label="Run now" variant="brand" onclick="{!c.runNow}" />
                     </aura:if>
                     <lightning:button label="Save" variant="brand" onclick="{!c.saveTemplateRecord}" />
@@ -82,7 +87,6 @@
                                                 rowNo = "{! rowNo }"
                                                 dataTypeMap = "{! v.dataTypeMap }"
                                                 selectedTemplateObject = "{!v.selectedTemplateObject}"
-                                                onlyReferenceField = "{!v.onlyReferenceField}"
                                                 aura:id = "fieldsDataContainer"/>
                 </aura:iteration>
             </aura:if>

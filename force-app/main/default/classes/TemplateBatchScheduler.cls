@@ -23,6 +23,7 @@ public with sharing class TemplateBatchScheduler implements Schedulable{
         Type customType = Type.forName(batchName);
         AC_BatchInterface instance = (AC_BatchInterface)customType.newInstance();
         instance.setVariables(JSONStrs, objAPI, query, 1, templateId, userId);
+        instance.setUniqueString(String.valueOf(System.now().getTime()));
         
         database.executebatch(instance,200);
         

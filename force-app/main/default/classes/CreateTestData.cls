@@ -2,14 +2,14 @@ public with sharing class CreateTestData {
     public void makeTestData() 
     {
         Savepoint sp = Database.setSavepoint();
-        String period = '2019/010';
+        String period = '2019/011';
         String DocType = 'SINV';
         String pDocType = 'PIN';
         String TranType = 'Invoice';
         //String TranType = 'Purchase Invoice';
-        Date startDate = Date.newInstance(2019,10,22);
+        Date startDate = Date.newInstance(2019,12,20);
         //Integer docNumber = 1;
-        Integer docDays = 8;
+        Integer docDays = 31;
         Integer docDay = 1;
         List<cflCustStruct__Transaction_Line_Item__c> transLineItems = new List<cflCustStruct__Transaction_Line_Item__c>();
         List<cflCustStruct__Transaction__c> transHeaders = new List<cflCustStruct__Transaction__c>();

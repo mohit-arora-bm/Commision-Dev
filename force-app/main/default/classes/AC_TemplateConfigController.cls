@@ -19,18 +19,27 @@ public with sharing class AC_TemplateConfigController {
                     'agileComp__AC_Name__c',
                     'agileComp__AC_Object__c',
                     'agileComp__AC_TemplateDataJson__c',
-                    'agileComp__AC_SuccessDateMap__c'
+                    'agileComp__AC_SuccessDateMap__c',
+                    'agileComp__AC_BatchClassName__c'
                 });
 
                 List<agileComp__AC_Templates_Config__c> templateConfigList = [SELECT Id, Name, 
                                                                                 agileComp__AC_Name__c, 
                                                                                 agileComp__AC_Object__c, 
                                                                                 agileComp__AC_TemplateDataJson__c,
-                                                                                agileComp__AC_SuccessDateMap__c
+                                                                                agileComp__AC_SuccessDateMap__c,
+                                                                                agileComp__AC_BatchClassName__c
                                                                             FROM agileComp__AC_Templates_Config__c 
                                                                             WHERE Id =: templateId];
 
                 tableConfig.templateConfigObject = templateConfigList != null && !templateConfigList.isEmpty() && templateConfigList[0] != null ? templateConfigList[0] : new agileComp__AC_Templates_Config__c();
+                if(!String.isEmpty(tableConfig.templateConfigObject.agileComp__AC_BatchClassName__c)) {
+                    List<ApexClass> ac = [SELECT Id FROM ApexClass WHERE Name = : tableConfig.templateConfigObject.agileComp__AC_BatchClassName__c];
+                    if (!ac.isEmpty()) {
+                        tableConfig.hasBatch = true;
+                    }
+                   
+                }
                 if(tableConfig.templateConfigObject != null && String.isNotBlank(tableConfig.templateConfigObject.agileComp__AC_Object__c)) {
                     tableConfig.fieldsList = fetchDescribedFields( tableConfig.templateConfigObject.agileComp__AC_Object__c);
                 }
@@ -63,7 +72,12 @@ public with sharing class AC_TemplateConfigController {
             Schema.DescribeFieldResult fieldDescribed = sObjectFieldMap.get(sobjectField).getDescribe();
            
             if (fieldDescribed.isUpdateable()) {
-                fieldWrapper.add(new DescribeFieldWrapper(fieldDescribed.getLabel(),fieldDescribed.getName(),String.valueof(fieldDescribed.getType())));
+                DescribeFieldWrapper wr = new DescribeFieldWrapper(fieldDescribed.getLabel(),fieldDescribed.getName(),String.valueof(fieldDescribed.getType()));
+                if(String.valueOf(fieldDescribed.getType()).toLowerCase() == 'reference' ){
+                    List<Schema.sObjectType> sobjectTypeList = fieldDescribed.getReferenceTo();
+                    wr.relatedObjectName = String.valueOf(sobjectTypeList[0].getDescribe().getName());
+                }
+                fieldWrapper.add(wr);
             }
         }
         fieldWrapper.sort();
@@ -76,13 +90,14 @@ public with sharing class AC_TemplateConfigController {
             FieldMetaWrapper fieldResponseToReturn = new FieldMetaWrapper();
             DescribeFieldResult fieldResult;
             SelectedFieldWrapper selectedField = (SelectedFieldWrapper) JSON.deserialize(selectedFieldJSON, SelectedFieldWrapper.class);
-            
+
             
             Map<String, Schema.SObjectType> globalDescribeMap = Schema.getGlobalDescribe();
             Schema.SObjectType targetType = globalDescribeMap.get(objectAPIName);
-            Map<String, Schema.SObjectField> sobjectFieldMap = targetType.getDescribe().fields.getMap();
 
+            Map<String, Schema.SObjectField> sobjectFieldMap = targetType.getDescribe().fields.getMap();
             if(!selectedField.isFieldRelated) {
+                
                 fieldResult = sobjectFieldMap.get(selectedField.selectedOption).getDescribe();
                 fieldResponseToReturn.dataType = String.valueOf(fieldResult.getType());
                 fieldResponseToReturn.isSortable = fieldResult.isSortable();
@@ -113,7 +128,7 @@ public with sharing class AC_TemplateConfigController {
     }
 
     @AuraEnabled
-    public static String saveTemplateData(String templateId, String templateName, String objectName, String dataJson, String className){
+    public static String saveTemplateData(String templateId, String templateName, String objectName, String dataJson){
         
         agileComp__AC_Templates_Config__c tempConfig = new agileComp__AC_Templates_Config__c();
         try {
@@ -126,16 +141,18 @@ public with sharing class AC_TemplateConfigController {
             Integer index = 1;
             for (AC_SchedulerTemplateController.DataListWrapper obj : dataList) {
                 String str = JSON.serialize(obj);
+                System.debug(str);
                 // Implement any logic to be scheduled
                 String query = AC_SchedulerTemplateController.queryGenerator(str, objectName, index, templateId);
+                System.debug(query);
                 database.query(query + ' LIMIT 1');
                 index++;
             }
             tempConfig.agileComp__AC_Name__c = templateName;
             tempConfig.Name = templateName;
-            if (String.isEmpty(templateId)) {
-                tempConfig.agileComp__AC_BatchClassName__c = className;
-            }
+            // if (String.isEmpty(templateId)) {
+            //     tempConfig.agileComp__AC_BatchClassName__c = className;
+            // }
             
             tempConfig.agileComp__AC_Object__c = objectName;
             tempConfig.agileComp__AC_TemplateDataJson__c = dataJson;
@@ -162,18 +179,26 @@ public with sharing class AC_TemplateConfigController {
             throw new AuraHandledException(ex.getMessage() + Label.AC_Error_Separator + ex.getStackTraceString());
         }
     }
-
-    public static String getSessionIdFromVFPage() {
+    @AuraEnabled
+    public static SessionWrapper getSessionId() {
         if(!Test.isRunningTest()){
-            String SESSION_ID_START = 'SESSION_ID_START';
-            String SESSION_ID_END = 'SESSION_ID_END';
-            String pageContent = Page.SessionIdPage.getContent().toString();
-            Integer startIndex = pageContent.indexOf(SESSION_ID_START) + SESSION_ID_START.length();
-            Integer endIndex = pageContent.indexOf(SESSION_ID_END);
-            return pageContent.substring(startIndex, endIndex);
+            HttpRequest req = new HttpRequest();
+            req.setMethod('POST');
+            //End point for authentication
+            req.setEndpoint('https://login.salesforce.com/services/oauth2/token?grant_type=password&client_id=3MVG9GYWKbMgBvbxqrqEFUDJdAJ3LBWt3AVEOtO7Q5pOjfNShJ56to368HTBYyJYa8pWVYY19Olt24dtiT0tt&client_secret=E503CCB17FE04A7B1E76200E6CB9D2833CC677223A8E83ADD7FF9FD5F653CE73&username=mohit@cloudfirstlabs.com.commdev&password=password@12hfyGieb43GKXnivU7oUrRqVKh');
+            
+            req.setTimeout(60000);
+            
+            Http h = new Http();
+            HttpResponse res = h.send(req);
+            //Salesforce defined JSON Parser
+        
+            System.debug('results'+res.getBody());
+            SessionWrapper wrapper = (SessionWrapper)JSON.deserialize(res.getBody(), SessionWrapper.class);
+            return wrapper;
         }
         else{
-            return UserInfo.getSessionId();
+            return null;
         }
     }
 
@@ -184,14 +209,13 @@ public with sharing class AC_TemplateConfigController {
         for(String sobjectField : sObjectFieldMap.keyset()){
             Schema.DescribeFieldResult fieldDescribed = sObjectFieldMap.get(sobjectField).getDescribe();
             // if (fieldDescribed.isGroupable() || String.valueof(fieldDescribed.getType()) == 'CURRENCY' || String.valueof(fieldDescribed.getType()) == 'DOUBLE' || String.valueof(fieldDescribed.getType()) == 'INTEGER') {
-                DescribeFieldWrapper fieldObj = new DescribeFieldWrapper(fieldDescribed.getLabel(),fieldDescribed.getName(),String.valueof(fieldDescribed.getType()),fieldDescribed.isHtmlFormatted(),false,false,fieldDescribed.isSortable());
+                DescribeFieldWrapper fieldObj = new DescribeFieldWrapper(fieldDescribed.getLabel(),fieldDescribed.getName(),String.valueof(fieldDescribed.getType()));
                 if(String.valueOf(fieldDescribed.getType()).toLowerCase() == 'reference' ){
                     List<Schema.sObjectType> sobjectTypeList = fieldDescribed.getReferenceTo();
                     String relationshipName = fieldDescribed.getRelationshipName();
                     if(!sobjectTypeList.isEmpty() && String.isNotBlank(relationshipName) && sobjectTypeList[0].getDescribe().getName() != null){
                         fieldObj.relatedObjectName = String.valueOf(sobjectTypeList[0].getDescribe().getName());
-                        fieldWrapper.add(new DescribeFieldWrapper(fieldDescribed.getLabel(),fieldDescribed.getName(),String.valueof(fieldDescribed.getType()),fieldDescribed.isHtmlFormatted(),
-                                false,false,fieldDescribed.isSortable(),String.valueOf(sobjectTypeList[0].getDescribe().getName()),relationshipName));
+                        fieldWrapper.add(new DescribeFieldWrapper(fieldDescribed.getLabel(),fieldDescribed.getName(),String.valueof(fieldDescribed.getType()),String.valueOf(sobjectTypeList[0].getDescribe().getName()),relationshipName));
                     }    
                 }
                 fieldWrapper.add(fieldObj);
@@ -203,39 +227,44 @@ public with sharing class AC_TemplateConfigController {
     @AuraEnabled
     public static void testNow( String recordId ){
         // try{
-        agileComp__AC_Templates_Config__c template = [SELECT Id, Name,
-                                                            agileComp__AC_Name__c, 
-                                                            agileComp__AC_Object__c, 
-                                                            agileComp__AC_TemplateDataJson__c,
-                                                            agileComp__AC_BatchClassName__c 
-                                                            FROM agileComp__AC_Templates_Config__c
-                                                            WHERE Id = : recordId];
+            agileComp__AC_Templates_Config__c template = [SELECT Id, Name,
+                                                                agileComp__AC_Name__c, 
+                                                                agileComp__AC_Object__c, 
+                                                                agileComp__AC_TemplateDataJson__c,
+                                                                agileComp__AC_BatchClassName__c 
+                                                                FROM agileComp__AC_Templates_Config__c
+                                                                WHERE Id = : recordId];
+            List<String> statusStrings = new List<String>{'Processing','Queued','Holding','Preparing'};
+            Integer asyncJobs = [SELECT Count() from AsyncApexJob WHERE ApexClass.Name = : template.agileComp__AC_BatchClassName__c AND Status IN : statusStrings];
+            if (asyncJobs > 0) {
+                throw new AuraHandledException('The job is already running'+ Label.AC_Error_Separator + 'The job is already running');
+            }
+            List<AC_SchedulerTemplateController.DataListWrapper> dataList = (List<AC_SchedulerTemplateController.DataListWrapper>)JSON.deserialize(template.agileComp__AC_TemplateDataJson__c,List<AC_SchedulerTemplateController.DataListWrapper>.class);
+            List<String> JSONStrs = new List<String>();   
+            for (AC_SchedulerTemplateController.DataListWrapper obj : dataList) {
+                String str = JSON.serialize(obj);
+                JSONStrs.add(str); 
+            }
+            String query = AC_SchedulerTemplateController.queryGenerator(JSONStrs[0], template.agileComp__AC_Object__c, 1, recordId);
+            System.debug('query Schedule'+query);
+            System.debug(template.agileComp__AC_BatchClassName__c);
+            String errorMessage = 'This template has no batch to run. Please try by creating new one.';
+            if (String.isEmpty(template.agileComp__AC_BatchClassName__c)) {
+                throw new AuraHandledException(errorMessage + Label.AC_Error_Separator + errorMessage);
+            }
+            // We now call the batch class to be scheduled
+            // TemplateBatch b = new TemplateBatch(JSONStrs, template.agileComp__AC_Object__c, query, 1, recordId);
 
-        List<AC_SchedulerTemplateController.DataListWrapper> dataList = (List<AC_SchedulerTemplateController.DataListWrapper>)JSON.deserialize(template.agileComp__AC_TemplateDataJson__c,List<AC_SchedulerTemplateController.DataListWrapper>.class);
-        List<String> JSONStrs = new List<String>();   
-        for (AC_SchedulerTemplateController.DataListWrapper obj : dataList) {
-            String str = JSON.serialize(obj);
-            JSONStrs.add(str);
-        }
-        String query = AC_SchedulerTemplateController.queryGenerator(JSONStrs[0], template.agileComp__AC_Object__c, 1, recordId);
-        System.debug('query Schedule'+query);
-        System.debug(template.agileComp__AC_BatchClassName__c);
-        String errorMessage = 'This template has no batch to run. Please try by creating new one.';
-        if (String.isEmpty(template.agileComp__AC_BatchClassName__c)) {
-            throw new AuraHandledException(errorMessage + Label.AC_Error_Separator + errorMessage);
-        }
-        // We now call the batch class to be scheduled
-        // TemplateBatch b = new TemplateBatch(JSONStrs, template.agileComp__AC_Object__c, query, 1, recordId);
-
-        Type customType = Type.forName(template.agileComp__AC_BatchClassName__c);
-        System.debug(customType);
-        if (customType == null) {
-            throw new AuraHandledException(errorMessage + Label.AC_Error_Separator + errorMessage);
-        }
-        AC_BatchInterface instance = (AC_BatchInterface)customType.newInstance();
-        instance.setVariables(JSONStrs, template.agileComp__AC_Object__c, query, 1, recordId,UserInfo.getUserId());
-        
-        database.executebatch(instance,200);
+            Type customType = Type.forName(template.agileComp__AC_BatchClassName__c);
+            System.debug(customType);
+            if (customType == null) {
+                throw new AuraHandledException(errorMessage + Label.AC_Error_Separator + errorMessage);
+            }
+            AC_BatchInterface instance = (AC_BatchInterface)customType.newInstance();
+            instance.setVariables(JSONStrs, template.agileComp__AC_Object__c, query, 1, recordId,UserInfo.getUserId());
+            instance.setUniqueString(String.valueOf(System.now().getTime()));
+            
+            database.executebatch(instance,200);
         // } catch(Exception ex) {
         //     throw new AuraHandledException(ex.getMessage() + Label.AC_Error_Separator + ex.getStackTraceString());
         // }
@@ -278,43 +307,37 @@ public with sharing class AC_TemplateConfigController {
     //     @AuraEnabled public String templateId;
     //     @AuraEnabled public String sessionId;
     // }
+    public class SessionWrapper {
+        @AuraEnabled public String access_token;
+        @AuraEnabled public String instance_url;
+    }
 
     public class DescribeFieldWrapper implements Comparable {
         @AuraEnabled public String label;
         @AuraEnabled public String value;
         @AuraEnabled public String displayType;
-        @AuraEnabled public Boolean isHTMLFormatted;
-        @AuraEnabled public Boolean disabled;
-        @AuraEnabled public Boolean isSelected;
-        @AuraEnabled public Boolean isSortable;
+        // @AuraEnabled public Boolean isHTMLFormatted;
+        // @AuraEnabled public Boolean disabled;
+        // @AuraEnabled public Boolean isSelected;
+        // @AuraEnabled public Boolean isSortable;
         @AuraEnabled public Boolean isRelated = false;
         @AuraEnabled public String relatedObjectName ;
         @AuraEnabled public String relationshipName ; 
         
 
-        public describeFieldWrapper(string label, String value, String displayType, Boolean isHTMLFormatted, Boolean disabled, Boolean isSelected, Boolean isSortable) {
-            this.label= label;
-            this.value = value;
-            this.displayType = displayType;
-            this.isHTMLFormatted = isHTMLFormatted;
-            this.disabled = disabled;
-            this.isSelected = isSelected;
-            this.isSortable = isSortable;
-        }
         public describeFieldWrapper(string label, String value, String displayType) {
             this.label= label;
             this.value = value;
             this.displayType = displayType;
         }
-        public describeFieldWrapper(string label, String value, String displayType, Boolean isHTMLFormatted, Boolean disabled, 
-                Boolean isSelected, Boolean isSortable,String relatedObjectName,String relationshipName) {
+        public describeFieldWrapper(string label, String value, String displayType, String relatedObjectName,String relationshipName) {
             this.label= label;
             this.value = value+'-';
             this.displayType = displayType;
-            this.isHTMLFormatted = isHTMLFormatted;
-            this.disabled = disabled;
-            this.isSelected = isSelected;
-            this.isSortable = isSortable;
+            // this.isHTMLFormatted = isHTMLFormatted;
+            // this.disabled = disabled;
+            // this.isSelected = isSelected;
+            // this.isSortable = isSortable;
             this.isRelated          =   true;
             this.relatedObjectName  =   relatedObjectName;
             this.relationshipName   =   relationshipName; 
@@ -362,6 +385,7 @@ public with sharing class AC_TemplateConfigController {
         @AuraEnabled public List<DescribeFieldWrapper> mappingFields; 
         @AuraEnabled public agileComp__AC_Templates_Config__c templateConfigObject;
         @AuraEnabled public Boolean isScheduled;
+        @AuraEnabled public Boolean hasBatch;
         @AuraEnabled public Map<String,List<AC_OptionWrapper>> dataTypeOptionMap;
         @AuraEnabled public Datetime lastSuccessDate;
     }

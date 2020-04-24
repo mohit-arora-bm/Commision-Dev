@@ -1,0 +1,22 @@
+.THIS .CardBoardCSS{
+    border: .5rem;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.20);
+}
+.THIS .quoteTempConfig{
+   max-height:350px !important;
+   width:100%!important;
+}
+.THIS .toggleBtn .slds-checkbox_faux_container .slds-checkbox_on{
+    display: none !important;
+}
+.THIS .toggleBtn .slds-checkbox_faux_container .slds-checkbox_off{
+    display: none !important;
+}
+.THIS .buttonPosition{
+    position: relative;
+    top: -4px;
+}
+.THIS .positionFix {
+    position: relative;
+    top: 20px;
+}

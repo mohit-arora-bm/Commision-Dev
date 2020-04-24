@@ -1,0 +1,17 @@
+.THIS.outerDiv {
+    background-color: white;
+}
+.THIS .newIcon svg {
+    fill: token(addIconColor) !important;
+}
+
+.THIS .banIcon svg {
+    fill: token(removeIconColor) !important;
+}
+
+.THIS .pointer {
+    cursor: pointer;
+}
+.THIS .slds-form-element__icon {
+    display: none;
+}

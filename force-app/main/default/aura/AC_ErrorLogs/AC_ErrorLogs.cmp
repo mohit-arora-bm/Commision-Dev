@@ -8,8 +8,14 @@
     <c:AC_DataService aura:id="dataService" />
     <!-- Lightning Spinner -->
     <lightning:spinner alternativeText="Loading" size="medium" class="templateConfigSpinner slds-hide" aura:id="Spinner"/>
-    <lightning:input type="date" name="Filter date" label="Filter date" value="{!v.filterDate}" class="slds-m-around--large"/>
-    
+    <lightning:layout>
+        <lightning:layoutItem>
+            <lightning:input type="date" name="Filter date" label="Filter date" value="{!v.filterDate}" class="slds-m-around--large"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem>
+            <lightning:buttonIcon iconName="utility:refresh" variant="border-filled" alternativeText="refresh" onclick="{! c.doInit }" class="slds-m-around--xx-large"/>
+        </lightning:layoutItem>
+    </lightning:layout>
     <table class="slds-table slds-table_bordered " >
         <thead>
             <tr class=' slds-line-height_reset'>

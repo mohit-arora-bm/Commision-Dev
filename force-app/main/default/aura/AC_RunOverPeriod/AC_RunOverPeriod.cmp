@@ -1,0 +1,7 @@
+<aura:component access="global" controller="AC_RunOverPeriodController"
+				implements="force:appHostable,force:hasRecordId,force:lightningQuickAction">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!-- Data Service -->
+    <c:AC_DataService aura:id="dataService" />
+    <lightning:spinner alternativeText="Loading" size="large" variant="brand"/>
+</aura:component>

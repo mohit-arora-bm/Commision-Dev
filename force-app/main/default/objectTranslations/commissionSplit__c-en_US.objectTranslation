@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Commission Split</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Commission Splits</value>
+    </caseValues>
+    <fields>
+        <label><!-- Sales Rep --></label>
+        <name>Commission_Sales_Rep__c</name>
+        <relationshipLabel><!-- Commission Splits --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- Quote Document Split Amount --></help>
+        <label><!-- Quote Document --></label>
+        <name>Quote_Document__c</name>
+        <relationshipLabel><!-- Commission Splits --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Sales Order --></label>
+        <name>Sales_Order__c</name>
+        <relationshipLabel><!-- Commission Splits --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- Split Percentage for this user --></help>
+        <label><!-- Split Percent --></label>
+        <name>Split_Percent__c</name>
+    </fields>
+    <fields>
+        <help><!-- Account that the split is associated with. --></help>
+        <label><!-- Account Split --></label>
+        <name>accountSplit__c</name>
+        <relationshipLabel><!-- Commission Splits --></relationshipLabel>
+    </fields>
+    <layouts>
+        <layout>Commission Split Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Commission Split Layout (Account)</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Commission Split Layout (Quote)</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <recordTypes>
+        <description><!-- Account Commission Split --></description>
+        <label><!-- Account Split --></label>
+        <name>Account_Split</name>
+    </recordTypes>
+    <recordTypes>
+        <description><!-- Quote Commission Split --></description>
+        <label><!-- Quote Split --></label>
+        <name>Quote_Split</name>
+    </recordTypes>
+    <recordTypes>
+        <label><!-- Sales Order Split --></label>
+        <name>Sales_Order_Split</name>
+    </recordTypes>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

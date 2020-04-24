@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Commission Base Input</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Commission Base Inputs</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Commission Detail Report --></label>
+        <name>commissionDetailReport</name>
+    </fieldSets>
+    <fields>
+        <label><!-- Account --></label>
+        <name>Account__c</name>
+        <relationshipLabel><!-- Commission Base Inputs --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Commission Base Unique Id --></label>
+        <name>Commission_Base_Unique_Id__c</name>
+    </fields>
+    <fields>
+        <help><!-- Commission sales rep that this transaction is associated with --></help>
+        <label><!-- Commission Sales Rep --></label>
+        <name>Commission_Sales_Rep__c</name>
+        <relationshipLabel><!-- Commission Base Inputs --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- Commission Split this was associated with --></help>
+        <label><!-- Commission Split --></label>
+        <name>Commission_Split__c</name>
+        <relationshipLabel><!-- Commission Base Inputs --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Document_Date --></label>
+        <name>Document_Date__c</name>
+    </fields>
+    <fields>
+        <help><!-- Original Document Extended Cost (Before Split) --></help>
+        <label><!-- Orig_Doc_Ext_Cost --></label>
+        <name>Orig_Doc_Ext_Cost__c</name>
+    </fields>
+    <fields>
+        <label><!-- Orig_Doc_Ext_Sales --></label>
+        <name>Orig_Doc_Ext_Sales__c</name>
+    </fields>
+    <fields>
+        <label><!-- Orig_Doc_Freight --></label>
+        <name>Orig_Doc_Freight__c</name>
+    </fields>
+    <fields>
+        <help><!-- Quote Associated with this Line Item (if Exists) --></help>
+        <label><!-- Quote --></label>
+        <name>Quote__c</name>
+        <relationshipLabel><!-- Commission Base Inputs --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Sales Order --></label>
+        <name>Sales_Order__c</name>
+        <relationshipLabel><!-- Commission Base Inputs --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- Split Document Gross profit (Sales - Cost - Freight Cost) --></help>
+        <label><!-- Split Document GP --></label>
+        <name>SplitDocumentGp__c</name>
+    </fields>
+    <fields>
+        <label><!-- Split_Doc_Ext_Cost --></label>
+        <name>Split_Doc_Ext_Cost__c</name>
+    </fields>
+    <fields>
+        <label><!-- Split_Doc_Ext_Sales --></label>
+        <name>Split_Doc_Ext_Sales__c</name>
+    </fields>
+    <fields>
+        <label><!-- Split_Doc_Freight --></label>
+        <name>Split_Doc_Freight__c</name>
+    </fields>
+    <fields>
+        <label><!-- Split Document Origin --></label>
+        <name>Split_Document_Origin__c</name>
+        <picklistValues>
+            <masterLabel>AS</masterLabel>
+            <translation><!-- AS --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>DS</masterLabel>
+            <translation><!-- DS --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>None</masterLabel>
+            <translation><!-- None --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Split Percent --></label>
+        <name>Split_Percent__c</name>
+    </fields>
+    <fields>
+        <label><!-- Templates Config --></label>
+        <name>Templates_Config__c</name>
+        <relationshipLabel><!-- Commission Base Inputs --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- Originating document type (Type Of (Quote / Opportunity / Invoice etc...)  Edit Flow and PickList values --></help>
+        <label><!-- Document Type --></label>
+        <name>documentType__c</name>
+        <picklistValues>
+            <masterLabel>Account</masterLabel>
+            <translation><!-- Account --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Quote</masterLabel>
+            <translation><!-- Quote --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Sales Order</masterLabel>
+            <translation><!-- Sales Order --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <help><!-- Original Document Gross Profit (Sales - Cost - Freight Cost) --></help>
+        <label><!-- Original Document Gp --></label>
+        <name>originalDocumentGp__c</name>
+    </fields>
+    <fields>
+        <help><!-- Total Margin including Freight --></help>
+        <label><!-- Original Document Margin --></label>
+        <name>originalDocumentMargin__c</name>
+    </fields>
+    <fields>
+        <help><!-- Original Document Total Cost (Cost + freight Cost) --></help>
+        <label><!-- Original Document Total Cost --></label>
+        <name>originalDocumentTotalCost__c</name>
+    </fields>
+    <fields>
+        <help><!-- Split Document Total Margin (Including Freight Cost) --></help>
+        <label><!-- Split Document Margin --></label>
+        <name>splitDocumentMargin__c</name>
+    </fields>
+    <fields>
+        <help><!-- Split Document Total Cost (Cost + freight) --></help>
+        <label><!-- Split Document Total Cost --></label>
+        <name>splitDocumentTotalCost__c</name>
+    </fields>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

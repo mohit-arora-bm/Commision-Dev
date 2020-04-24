@@ -1,0 +1,7 @@
+.THIS.outerDiv{
+    background-color: white;
+}
+.THIS .inActive {
+    pointer-events: none;
+    opacity: 0.5;
+}

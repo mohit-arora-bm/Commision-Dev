@@ -1,0 +1,38 @@
+<aura:component implements="force:appHostable" controller="TemplateDataLoaderController" access="global" >
+    
+    
+    <aura:attribute name="ObjectName" type="String" default="AQ_Data_Loader_Template__c"/>
+    <aura:attribute name="fieldList" type="Object[]" default="[{'fieldAPIName' : 'Name','fieldLabel' :'Name'}]"/>
+
+    <!--aura:handler name="init" value="{!this}" action="{!c.doInit}" /-->
+    <aura:handler event="c:AQ_GenericEvent" action="{!c.handleRecordChange}"/>
+
+    <c:AQ_DataService aura:id="dataService" />
+
+    <div >
+        <article class=" slds-card">
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container " title="Data Loader Template">
+                            <lightning:icon iconName="utility:settings" alternativeText="Data Loader Template" />
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <h1  class="slds-page-header__title slds-truncate slds-align-middle" title="Product Bundle Configuration">Data Loader Template</h1>
+                    </div>
+                </header>
+            </div>
+            <div class="slds-card__body">
+                <Lightning:layout multipleRows="true">
+                    <Lightning:layoutItem size="3" class="slds-box slds-p-around_none">
+                        <c:DataLoaderTemplateList objectAPIName="{!v.ObjectName}" fieldsList="{!v.fieldList}" title="Templates"/>
+                    </Lightning:layoutItem>
+                    <Lightning:layoutItem size="9">
+                        {!v.body}
+                    </Lightning:layoutItem>
+                </Lightning:layout>
+            </div>
+        </article>
+    </div>
+</aura:component>

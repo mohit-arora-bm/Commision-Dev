@@ -1,0 +1,36 @@
+<aura:component>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="record" type="Object"/>
+    <aura:attribute name="oldRecord" type="Object"/>
+    <!-- <aura:attribute name="newRowId" type="Integer"/>
+    <aura:attribute name="disabled" type="Boolean" default="false" /> -->
+    <section role="dialog" aria-modal="true" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <h2 class="slds-text-heading_medium slds-hyphenate">Adjustment</h2>
+            </header>
+            <lightning:recordEditForm
+                onsubmit="{!c.handleSubmit}"
+                onsuccess="{!c.handleSuccess}"
+                recordId="{!v.recordId}"
+                objectApiName="agileComp__commissionAdjustmentDetail__c">
+                <div class="slds-modal__content slds-p-around_medium">
+                    <center>
+                        <lightning:messages />
+                        <!-- <lightning:inputField fieldName="Name" /> -->
+                        <lightning:inputField fieldName="agileComp__Type__c" value="{!v.oldRecord.agileComp__Type__c}"/>
+                        <lightning:inputField fieldName="agileComp__Adjustment_Type__c" value="{!v.oldRecord.agileComp__Adjustment_Type__c}"/>
+                        <lightning:inputField fieldName="agileComp__Adjustment_Amount__c" value="{!v.oldRecord.agileComp__Adjustment_Amount__c}" />
+                        <lightning:inputField fieldName="agileComp__Adjustment_Description__c" value="{!v.oldRecord.agileComp__Adjustment_Description__c}" />
+                    </center>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="brand" type="submit" name="save" label="Save" />
+                    <lightning:button label="Cancel" title="Cancel" onclick="{! c.Cancel }"/>
+                </footer>
+            </lightning:recordEditForm>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+    
+</aura:component>

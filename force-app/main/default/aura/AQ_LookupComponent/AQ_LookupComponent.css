@@ -1,0 +1,15 @@
+.THIS .slds-dropdown {
+	max-height: 200px;
+	overflow: auto;
+}
+.THIS .colorBlack {
+	color: black;
+}
+.THIS .positionTop{
+	position: relative;
+    top: -3px;
+}
+.THIS .slds-input{
+	position: relative;
+    top: -3px;
+}

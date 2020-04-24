@@ -11,6 +11,7 @@
                 let dataService = component.find('dataService');
                 let action = component.get('c.returnFieldDataType');
                 let objectAPIName = component.get('v.selectedTemplateObject');
+                console.log(JSON.stringify(eventParamsObj));
                 action.setParams({ 
                     selectedFieldJSON: JSON.stringify(eventParamsObj),
                     objectAPIName: objectAPIName
@@ -111,11 +112,28 @@
         
         if (isValid) {
             
-            
+            let accountField;
+            if (data.accountField && data.accountField.isFieldRelated) {
+                accountField = JSON.parse(data.accountField.selectedField).relatedField;
+            }
+            else {
+                accountField = data.accountField.selectedField;
+            }
+
+            let documentField;
+            if (data.documentField && data.documentField.isFieldRelated) {
+                documentField = JSON.parse(data.documentField.selectedField).relatedField;
+            }
+            else {
+                documentField = data.documentField.selectedField;
+            }
+
             let mappingList = [];
             let selectedFields = [];
             let selectedFilters = data.selectedFilters;
             let selectedFieldOptions = data.selectedFieldOptions;
+            let accMap = true;
+            let docMap = true;
             for(let index in selectedFieldOptions) {
                 if (selectedFieldOptions[index].mapping) {
                     if (mappingList.includes(selectedFieldOptions[index].mapping)) {
@@ -141,28 +159,30 @@
                 }
                 else {
                     selectedFields.push(selectedFld);
+                    if(selectedFld === accountField && !selectedFieldOptions[index].mapping) {
+                        accMap = false;
+                    }
+                    if(selectedFld === documentField && !selectedFieldOptions[index].mapping) {
+                        docMap = false;
+                    }
                 }
             }
-            let accountField;
-            if (data.accountField && data.accountField.isFieldRelated) {
-                accountField = JSON.parse(data.accountField.selectedField).relatedField;
-            }
-            else {
-                accountField = data.accountField.selectedField;
-            }
+            
             if (accountField && !selectedFields.includes(accountField)) {
                 this.showToast(component, 'Error', 'error', 'You have to select account split field in Select Fields section.');
                 data.hasError = true;
             }
-            let documentField;
-            if (data.documentField && data.documentField.isFieldRelated) {
-                documentField = JSON.parse(data.documentField.selectedField).relatedField;
-            }
-            else {
-                documentField = data.documentField.selectedField;
-            }
+            
             if (!selectedFields.includes(documentField)) {
                 this.showToast(component, 'Error', 'error', 'You have to select document split field in Select Fields section.');
+                data.hasError = true;
+            }
+            if(!accMap) {
+                this.showToast(component, 'Error', 'error', 'Account split field should be mapped.');
+                data.hasError = true;
+            }
+            if(!docMap) {
+                this.showToast(component, 'Error', 'error', 'Document split field should be mapped.');
                 data.hasError = true;
             }
             let isContainsExtra = true;
@@ -256,7 +276,8 @@
 			func : '',
 			apexDataType: '',
 			isFieldRelated: false,
-			selectedFieldObj: {} 
+            selectedFieldObj: {},
+            mathFunc : ''
 		};
 		return fieldPayload;
     },

@@ -1,0 +1,92 @@
+<aura:component controller="AQ_LookupController">
+
+	<aura:attribute name="lookupData" type="Object[]"/>
+	<aura:attribute name="objectApiName" type="String"/>
+	<aura:attribute name="fieldApiName" type="String"/>
+	<aura:attribute name="fieldsSearchList" type="String" description="comma separated values of the other list of fields to be searched"/>
+	<aura:attribute name="searchText" type="String"/>
+	<aura:attribute name="placeholder" type="String" default="Search Template..."/>
+	<aura:attribute name="selectedItem" type="Object"/>
+	<aura:attribute name="noRecordsFound" type="String" default="No records found!"/>
+	<aura:attribute name="lookupIcon" type="String"/>
+	<aura:attribute name="objectLabel" type="String"/>
+	<aura:attribute name="searchFromWithin" type="Boolean" default="false"/>
+	<aura:attribute name="withinSearchData" type="Object[]"/>
+	<aura:attribute name="preventLookupHide" type="Boolean" default="false"/>
+	<aura:attribute name="displayLabel" type="String" default=''/>
+	<aura:attribute name="required" type="Boolean" default="false"/>
+
+	<aura:method name="clearSelectedItem" action="{! c.onClear }"/>
+
+	<aura:registerEvent name="lookupEvent" type="c:AQ_LookupEvent"/>
+
+	<div class="slds-form-element">
+		<label class="{! if( v.displayLabel eq '', '', 'slds-form-element__label') }" for="combobox-id-1"><aura:if isTrue="{! v.required }"  ><span style="color:#b71010">* </span></aura:if>{! v.displayLabel }
+		&nbsp;<lightning:helptext iconName="utility:info" content='Select the template for which you would like to load the Data' class='positionTop'  />
+		</label>
+        <div class="slds-form-element__control">
+            <div class="slds-combobox_container">
+                <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox" aura:id="lookupDiv">
+                    <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+
+                    	<aura:if isTrue="{! not(empty(v.selectedItem)) }">
+	                    	<div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right" role="none">
+	            				<span class="slds-icon_container slds-combobox__input-entity-icon" title="{! v.objectLabel }">
+					              	<lightning:icon iconName="{! v.lookupIcon }" size="small" class='positionTop'/>
+					            	<span class="slds-assistive-text">{! v.objectLabel }</span>
+	            				</span>
+	            				<span class="slds-text-align_left slds-input slds-combobox__input slds-combobox__input-value" autocomplete="off" role="textbox" type="text" readonly="">
+	            					{! v.selectedItem.showText }
+	            				</span>
+	            				<button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" title="Remove selected option" onclick="{! c.onClear }">
+	              					<lightning:icon iconName="utility:close" size="xx-small"/>
+	              					<span class="slds-assistive-text">Remove selected option</span>
+	            				</button>
+	          				</div>
+
+	          				<aura:set attribute="else">
+		                        <input class="slds-input" required="{! v.required }" type="text" placeholder="{! v.placeholder }" onkeyup="{! c.filterList }" aura:id="searchInput" onblur="{! c.hideLookup }" onfocus="{! c.searchForExistingLookup }" />
+								<span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right" >
+									<lightning:icon iconName="utility:search" size="xx-small"/>
+								</span>
+								<div class="slds-dropdown slds-dropdown_fluid" onmousedown="{! c.mouseDown }" onmouseup="{! c.mouseUp }">
+			                        <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+			                        	<aura:if isTrue="{! v.lookupData.length eq 0 }">
+			                        		{! v.noRecordsFound }
+			                        		<aura:set attribute="else">
+			                        			<aura:if isTrue="{! v.searchText ne '' }">
+				                        			<aura:iteration items="{! v.lookupData }" var="lookup">
+				                        			    <li role="presentation" class="slds-listbox__item" onmousedown="{! c.onSelect }" id="{! lookup.val }">
+				                        			        <div class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+				                        			            <span class="slds-media__figure slds-listbox__option-icon">
+				                        			                <span class="slds-icon_container slds-icon-standard-solution">
+				                        			                    <lightning:icon iconName="{! v.lookupIcon }" size="small" />
+				                        			                </span>
+				                        			            </span>
+				                        			            <span class="slds-media__body slds-text-align_left">
+				                        			                <span class="slds-listbox__option-text slds-listbox__option-text_entity">{! lookup.showText }</span>
+				                        			                <span class="slds-listbox__option-meta colorBlack slds-listbox__option-meta_entity">
+				                        			                	<aura:iteration items="{! lookup.otherFieldsWrapper }" var="innerVar" indexVar="index">
+				                        			                		{! innerVar.showText }
+				                        			                		<aura:if isTrue="{! ( index + 1 ) ne lookup.otherFieldsWrapper.length }">
+				                        			                		&nbsp;•&nbsp;
+				                        			                		</aura:if>
+				                        			                	</aura:iteration>
+				                        			                </span>
+				                        			            </span>
+				                        			        </div>
+				                        			    </li>
+				                        			</aura:iteration>
+				                        		</aura:if>
+			                        		</aura:set>
+			                        	</aura:if>	                            
+			                        </ul>
+			                    </div>
+	          				</aura:set>
+	          			</aura:if>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

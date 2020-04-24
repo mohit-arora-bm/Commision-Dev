@@ -1,34 +1,39 @@
 global class AC_SelectLookUpFieldController {
-	 @AuraEnabled
+	@AuraEnabled
 	global static String returnObjectFields(String objName,Integer selectedIndex) {
-        if(!String.isEmpty(objName)){
-            List<fieldWrapper> wrapperList = new List<fieldWrapper>();
-            fieldWrapper wrapperObj;
-            Map<string,SObjectField> fieldsList = Schema.getGlobalDescribe().get(objName).getDescribe().fields.getMap();
-            List<SObjectField> objectFields = fieldsList.values();
-            for( SObjectField objectField : objectFields ) {
-                Schema.DescribeFieldResult fieldDescribe = objectField.getDescribe();
-                if( fieldDescribe.isAccessible()  
-                    && !fieldDescribe.isExternalID()) {
-                    wrapperObj = new fieldWrapper( fieldDescribe );    
-                    if(String.valueOf(fieldDescribe.getType()).toLowerCase() == 'reference' && selectedIndex != null && selectedIndex < 3){
-                        List<Schema.sObjectType> sobjectTypeList = fieldDescribe.getReferenceTo();
-                        String relationshipName = fieldDescribe.getRelationshipName();
-                        if(!sobjectTypeList.isEmpty() && String.isNotBlank(relationshipName) && sobjectTypeList[0].getDescribe().getName() != null){
-                            wrapperObj.relatedObjectName = String.valueOf(sobjectTypeList[0].getDescribe().getName());
-                            wrapperList.add(new fieldWrapper(String.valueOf(fieldDescribe.getLabel()),String.valueOf(fieldDescribe.getName()),true,String.valueOf(sobjectTypeList[0].getDescribe().getName()),relationshipName));               
-                        }    
+        try {
+            if(!String.isEmpty(objName)){
+                List<fieldWrapper> wrapperList = new List<fieldWrapper>();
+                fieldWrapper wrapperObj;
+                Map<string,SObjectField> fieldsList = Schema.getGlobalDescribe().get(objName).getDescribe().fields.getMap();
+                List<SObjectField> objectFields = fieldsList.values();
+                for( SObjectField objectField : objectFields ) {
+                    Schema.DescribeFieldResult fieldDescribe = objectField.getDescribe();
+                    if( fieldDescribe.isAccessible()  
+                        && !fieldDescribe.isExternalID()) {
+                        wrapperObj = new fieldWrapper( fieldDescribe );    
+                        if(String.valueOf(fieldDescribe.getType()).toLowerCase() == 'reference' && selectedIndex != null && selectedIndex < 3){
+                            List<Schema.sObjectType> sobjectTypeList = fieldDescribe.getReferenceTo();
+                            String relationshipName = fieldDescribe.getRelationshipName();
+                            if(!sobjectTypeList.isEmpty() && String.isNotBlank(relationshipName) && sobjectTypeList[0].getDescribe().getName() != null){
+                                wrapperObj.relatedObjectName = String.valueOf(sobjectTypeList[0].getDescribe().getName());
+                                wrapperList.add(new fieldWrapper(String.valueOf(fieldDescribe.getLabel()),String.valueOf(fieldDescribe.getName()),true,String.valueOf(sobjectTypeList[0].getDescribe().getName()),relationshipName));               
+                            }    
+                        }
+                        wrapperList.add(wrapperObj);
                     }
-                    wrapperList.add(wrapperObj);
                 }
+                if(!wrapperList.isEmpty()){
+                    wrapperList.sort();
+                    return JSON.serialize(wrapperList); 
+                }
+                return null;
             }
-            if(!wrapperList.isEmpty()){
-                wrapperList.sort();
-                return JSON.serialize(wrapperList); 
-            }
-            return null;
+            return NULL;
+        } catch (Exception ex) {
+            throw new AuraHandledException(ex.getMessage() + Label.AC_Error_Separator + ex.getStackTraceString());
         }
-        return NULL;
+        
     }
 
 

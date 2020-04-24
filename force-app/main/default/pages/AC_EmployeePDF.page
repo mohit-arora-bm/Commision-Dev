@@ -1,0 +1,173 @@
+<apex:page standardController="commissionEmployeeAttainedValue__c" renderAs="pdf" extensions="AC_EmployeePDFController" applyBodyTag="false"> 
+    <head> 
+        <style> 
+            @page{
+            size: A4 landscape; 
+            } 
+        </style>
+        
+        <style type="text/css" media="print">
+            @page {
+            margin-bottom: 1cm;
+            
+            @bottom-center {
+            content: element(footer);
+            }
+            }
+            
+            .footer {
+            display: block;
+            bottom: 0;
+            padding: 1px;
+            position: running(footer);
+            }
+            
+        </style>
+    </head>
+    <body>
+        <h2>{!period.Name} Commission Statement, From:&nbsp;
+            <apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!period.dateStart__c}" /> </apex:outputText>
+             To:&nbsp;
+             <apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!period.dateEnd__c}" /> </apex:outputText>
+             </h2>
+        <br/>
+        <h2>Commission Employee Attained Value</h2>
+        <table style="font-size: 13px; border-collapse: collapse; width: 100%;"  >
+            <thead >
+                <tr>
+                    <apex:repeat value="{!$ObjectType.commissionEmployeeAttainedValue__c.FieldSets.EAV_CommStmtFieldSet}" var="eav" >
+                        <th  style="border-style : solid;border-width: thin; text-align:center; ">{!eav.Label}</th>
+                    </apex:repeat>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <apex:repeat value="{!$ObjectType.commissionEmployeeAttainedValue__c.FieldSets.EAV_CommStmtFieldSet}" var="eav" >
+                        <td  style="border-style : solid;border-width: thin; padding: 8px;">
+                            <!-- {!commissionEmployeeAttainedValue__c[eav]} -->
+                            <apex:outputField value="{!commissionEmployeeAttainedValue__c[eav]}"/>
+                            
+                        </td>
+                    </apex:repeat>
+                </tr>
+            </tbody>
+        </table>
+        <br/>
+        <h2>Tier(s) attained</h2>
+        <table style="font-size: 13px; border-collapse: collapse; width: 100%;" >
+            <thead >
+                <tr>
+                    <apex:repeat value="{!$ObjectType.commissionEmployeeAttainedDetail__c.FieldSets.EAD_CommStmtFieldSet}" var="fld" >
+                        <th  style="border-style : solid;border-width: thin; text-align:center; white-space:nowrap;">{!fld.Label}</th>
+                    </apex:repeat>
+                </tr>
+            </thead>
+            <tbody>
+                <apex:repeat value="{!eadList}" var="ead">
+                    <tr>
+                        <apex:repeat value="{!$ObjectType.commissionEmployeeAttainedDetail__c.FieldSets.EAD_CommStmtFieldSet}" var="fld" >
+                            <td  style="border-style : solid;border-width: thin; padding: 8px">
+                                <!-- {!ead[fld]} -->
+                                <apex:outputField value="{!ead[fld]}"/>
+                            </td>
+                        </apex:repeat>
+                    </tr>
+                </apex:repeat>
+            </tbody>
+        </table>
+        <br/>
+        <h2>Commission Adjustment</h2>
+        <table style="font-size: 13px; border-collapse: collapse; width: 100%;" >
+            <thead >
+                <tr>
+                    <apex:repeat value="{!$ObjectType.commissionAdjustmentDetail__c.FieldSets.Adj_Comm_Stmt}" var="fld" >
+                        <th  style="border-style : solid;border-width: thin; text-align:center; white-space:nowrap;">{!fld.Label}</th>
+                    </apex:repeat>
+                </tr>
+            </thead>
+            <tbody>
+                <apex:repeat value="{!adjList}" var="adj">
+                    <tr>
+                        <apex:repeat value="{!$ObjectType.commissionAdjustmentDetail__c.FieldSets.Adj_Comm_Stmt}" var="fld" >
+                            <td  style="border-style : solid;border-width: thin; padding: 8px">
+                                <!-- {!ead[fld]} -->
+                                <apex:outputField value="{!adj[fld]}"/>
+                            </td>
+                        </apex:repeat>
+                    </tr>
+                </apex:repeat>
+            </tbody>
+        </table>
+        <br/>
+        <h2>Commission Adjustment Sumations</h2>
+        <table style="font-size: 13px; border-collapse: collapse; width: 100%;" >
+            <thead >
+                <tr>
+                    <th  style="border-style : solid;border-width: thin; text-align:center; white-space:nowrap;">Adjustment Type</th>
+                    <th  style="border-style : solid;border-width: thin; text-align:center; white-space:nowrap;">Amount</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <apex:repeat value="{!agregateList}" var="adj">
+                    <tr>
+                        <td  style="border-style : solid;border-width: thin; padding: 8px">
+                            {!adj['agileComp__Adjustment_Type__c']}
+                        </td>
+                        <td  style="border-style : solid;border-width: thin; padding: 8px">
+                            <apex:outputText value="{0, Number, Currency}">
+                                <apex:param value="{!adj['amt']}"/>
+                            </apex:outputText>
+                            
+                        </td>
+                    </tr>
+                </apex:repeat>
+            </tbody>
+        </table>
+
+        <br/>
+        <apex:outputPanel rendered="{!$CurrentPage.parameters.includeDetails == 'true'}">
+            <h2>Commission Base Input</h2>
+            <table style="font-size: 13px; border-collapse: collapse; width: 100%;" >
+            <thead >
+                <tr>
+                    <apex:repeat value="{!$ObjectType.commissionBaseInput__c.FieldSets.commissionDetailReport}" var="fld" >
+                        <th  style="border-style : solid;border-width: thin; text-align:center; white-space:nowrap;">{!fld.Label}</th>
+                    </apex:repeat>
+                </tr>
+            </thead>
+            <tbody>
+                <apex:repeat value="{!baseInputs}" var="input">
+                    <tr>
+                        <apex:repeat value="{!$ObjectType.commissionBaseInput__c.FieldSets.commissionDetailReport}" var="fld" >
+                            <td  style="border-style : solid;border-width: thin; padding: 8px">
+                                <!-- {!ead[fld]} -->
+                                <apex:outputField value="{!input[fld]}"/>
+                            </td>
+                        </apex:repeat>
+                    </tr>
+                </apex:repeat>
+                <apex:outputPanel rendered="{!agregateInputs.size != 0}">
+                <tr>
+                    <apex:repeat value="{!agregateInputs}" var="inputVar">
+                        <td  style="border-style : solid;border-width: thin; padding: 8px">
+                            <apex:outputPanel rendered="{!inputVar != 0}">
+                                <apex:outputText value="{0, Number, Currency}" >
+                                    <apex:param value="{!inputVar}"/>
+                                </apex:outputText>
+                            </apex:outputPanel>
+                        </td>
+                    </apex:repeat>
+                </tr>
+                </apex:outputPanel>
+            </tbody>
+        </table>
+    </apex:outputPanel>
+    </body>
+    
+    <div class="footer" name="footer" style = "float: right;">
+        <apex:outputText value="{0,date,dd/MM/yyyy HH:mm:ss}">
+            <apex:param value="{!NOW()}"/>
+        </apex:outputText>
+    </div>
+</apex:page>

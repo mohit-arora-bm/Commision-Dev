@@ -1,10 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unreachable */
-/* eslint-disable no-else-return */
-/* eslint-disable guard-for-in */
-/* eslint-disable no-unused-vars */
-/* eslint-disable vars-on-top */
-/* eslint-disable no-unused-expressions */
 ({
 	fetchSobjectFields : function(component, sObjectName) {
 		var self = this;
@@ -19,13 +12,7 @@
 			if(!$A.util.isEmpty(response)) {
 				component.set('v.fieldOptions', response);
 				component.set('v.allFieldOptions',response);
-				let onlyReferenceField = [];
-				for(let key in response) {
-					if (!response[key].value.includes('-') && (response[key].displayType == "REFERENCE" || response[key].displayType == "ID")) {
-						onlyReferenceField.push(response[key]);
-					}
-				}
-				component.set('v.onlyReferenceField',onlyReferenceField);
+				
 			}
 			
 			component.set('v.initCompleted',true);
@@ -67,15 +54,11 @@
 			var dataService = component.find('dataService');
 			var templateId = component.get('v.recordId');
 			var action = component.get('c.saveTemplateData');
-			let className = templateConfigObject.templateName.replace(/[^a-zA-Z]/g, "");
-			className += new Date().getTime();
-			console.log('AC_BatchClassName= ',className);
 			action.setParams({
 				templateId : templateId,
 				templateName: templateConfigObject.templateName,
 				objectName : component.get("v.selectedTemplateObject"),
-				dataJson: JSON.stringify(templateConfigObject.dataList),
-				className : className
+				dataJson: JSON.stringify(templateConfigObject.dataList)
 			});
 
 			dataService.fetch(action).then($A.getCallback(function (response) {
@@ -84,14 +67,12 @@
 				
 				if(!$A.util.isEmpty(recordId)) {
 					helper.showToast(component, 'Success', 'success', 'Template record updated successfully');
-	
+
 					helper.refreshComponent(component,recordSelectEvent,helper);
 					
 				} else {
 					helper.showToast(component, 'Success', 'success', 'Template record created successfully');
-					let vfOrigin = component.get("v.vfHost");
-					let vfWindow = component.find("vfFrame").getElement().contentWindow;
-					vfWindow.postMessage(className, vfOrigin);
+					helper.refreshComponent(component,recordSelectEvent,helper);					
 				}
 				
 			})).catch(function (error) {
@@ -122,7 +103,7 @@
 	logError : function(component, methodName, errorName, errorMessage) {
 		this.hideSpinner(component);
 		console.error(methodName,errorName,errorMessage);
-		component.find('dataService').logException('AC_AgileQuoteTemplateConfig -> ' + methodName + errorName, errorMessage);
+		component.find('dataService').logException('AC_TemplateConfig -> ' + methodName + errorName, errorMessage);
 	},
 	showToast : function(component, title, type, message) {
 		$A.get('e.force:showToast').setParams({

@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="fire event when a record is selected">
+    <aura:attribute name="eventParamsObj" type="Object"/>
+</aura:event>

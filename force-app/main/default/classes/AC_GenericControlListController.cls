@@ -80,27 +80,66 @@ public class AC_GenericControlListController {
 		try {
             //Security Check if object is deletable
             AC_SecurityUtils.checkObjectIsDeletable(Id.valueOf(recordId).getSobjectType());
-            
 			SObject sobj = Id.valueOf(recordId).getSobjectType().newSobject(recordId);
 			delete new List<SObject> { sobj };
 		} catch(Exception ex) {
-            system.debug('error - ' + ex.getMessage());
 			throw new AuraHandledException(ex.getMessage() + Label.AC_Error_Separator + ex.getStackTraceString());
 		}
 	}
 
-
 	@AuraEnabled
-	public static Boolean getComponentDisability( String objectAPIName) {
-		Boolean isComponentDisabled = false;
-		DescribeSobjectResult desSobj = Schema.getGlobalDescribe().get(objectAPIName).getDescribe();
-			if(!( desSobj.isCreateable() && desSobj.isUpdateable() && desSobj.isDeletable() )  ) {
-				isComponentDisabled = true;
-			}
-		return isComponentDisabled;	
-			
+	public static void setGeneralConfig() {
+		try {
+			AC_ScheduleBatchCreation m = new AC_ScheduleBatchCreation();
+            system.schedule('AC_ScheduleBatchCreationJob 1', '0 0 * * * ?', m);
+            system.schedule('AC_ScheduleBatchCreationJob 2', '0 5 * * * ?', m); 
+            system.schedule('AC_ScheduleBatchCreationJob 3', '0 10 * * * ?', m);
+            system.schedule('AC_ScheduleBatchCreationJob 4', '0 15 * * * ?', m);
+            system.schedule('AC_ScheduleBatchCreationJob 5', '0 20 * * * ?', m);
+            system.schedule('AC_ScheduleBatchCreationJob 6', '0 25 * * * ?', m);
+            system.schedule('AC_ScheduleBatchCreationJob 7', '0 30 * * * ?', m);
+            system.schedule('AC_ScheduleBatchCreationJob 8', '0 35 * * * ?', m);
+            system.schedule('AC_ScheduleBatchCreationJob 9', '0 40 * * * ?', m);
+            system.schedule('AC_ScheduleBatchCreationJob 10', '0 45 * * * ?', m);
+            system.schedule('AC_ScheduleBatchCreationJob 11', '0 50 * * * ?', m);
+            system.schedule('AC_ScheduleBatchCreationJob 12', '0 55 * * * ?', m);
+		} catch (Exception ex) {
+			throw new AuraHandledException(ex.getMessage() + Label.AC_Error_Separator + ex.getStackTraceString());
+		}
 	}
 
+	@AuraEnabled
+	public static StartWrapper getComponentDisability( String objectAPIName) {
+		StartWrapper sw = new StartWrapper();
+		try {
+			DescribeSobjectResult desSobj = Schema.getGlobalDescribe().get(objectAPIName).getDescribe();
+			if(!( desSobj.isCreateable() && desSobj.isUpdateable() && desSobj.isDeletable() )  ) {
+				sw.isComponentDisabled = true;
+			}
+			String profileName = [SELECT Name from Profile WHERE Id = :UserInfo.getProfileId()].Name;
+			if (profileName == 'System Administrator') {
+				sw.hasCofigPermission = true;
+			}
+			String exp = 'AC_ScheduleBatchCreationJob%';
+        	List<CronTrigger> schedJobs = [SELECT Id, CronJobDetail.Name, NextFireTime FROM CronTrigger WHERE CronJobDetail.Name LIKE : exp];
+			if (!schedJobs.isEmpty()) {
+				sw.generalConfig = true;
+			}
+		} catch(Exception ex) {
+			throw new AuraHandledException(ex.getMessage() + Label.AC_Error_Separator + ex.getStackTraceString());
+		}	
+		return sw;
+	}
+	public class StartWrapper {
+		@AuraEnabled public Boolean isComponentDisabled;
+		@AuraEnabled public Boolean generalConfig;
+		@AuraEnabled public Boolean hasCofigPermission;
+		public StartWrapper() {
+			isComponentDisabled = false;
+			generalConfig = false;
+			hasCofigPermission = false;
+		}
+	}
 	public class RecordWrapper {
 		@AuraEnabled public String recordId;
 		@AuraEnabled public Datetime next;

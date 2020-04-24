@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>AC_Templates Config</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>AC_Templates Config</value>
+    </caseValues>
+    <fields>
+        <label><!-- AC_BatchClassName --></label>
+        <name>AC_BatchClassName__c</name>
+    </fields>
+    <fields>
+        <label><!-- AC_Name --></label>
+        <name>AC_Name__c</name>
+    </fields>
+    <fields>
+        <label><!-- AC_Object --></label>
+        <name>AC_Object__c</name>
+    </fields>
+    <fields>
+        <label><!-- AC_ScheduleData --></label>
+        <name>AC_ScheduleData__c</name>
+    </fields>
+    <fields>
+        <label><!-- AC_SuccessDateMap --></label>
+        <name>AC_SuccessDateMap__c</name>
+    </fields>
+    <fields>
+        <label><!-- AC_TemplateDataJson --></label>
+        <name>AC_TemplateDataJson__c</name>
+    </fields>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

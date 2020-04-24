@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Commission Adjustment Detail</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Commission Adjustment Details</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Adj_Comm_Stmt --></label>
+        <name>Adj_Comm_Stmt</name>
+    </fieldSets>
+    <fields>
+        <help><!-- Amount to Adjust Sales Rep for this type of Transaction --></help>
+        <label><!-- Adjustment Amount --></label>
+        <name>Adjustment_Amount__c</name>
+    </fields>
+    <fields>
+        <help><!-- Adjustment Description --></help>
+        <label><!-- Adjustment Description --></label>
+        <name>Adjustment_Description__c</name>
+    </fields>
+    <fields>
+        <help><!-- Commission Adjustment Type --></help>
+        <label><!-- Adjustment Type --></label>
+        <name>Adjustment_Type__c</name>
+    </fields>
+    <fields>
+        <help><!-- Attained Value Record (Rep) to apply Adjustment to. --></help>
+        <label><!-- Commission Employee Attained Value Recor --></label>
+        <name>Commission_Employee_Attained_Value_Recor__c</name>
+        <relationshipLabel><!-- Commission Adjustment Details --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- System Generated --></label>
+        <name>System_Generated__c</name>
+    </fields>
+    <fields>
+        <label><!-- Team Adjustment Id --></label>
+        <name>Team_Adjustment_Id__c</name>
+    </fields>
+    <fields>
+        <label><!-- Team Adjustment --></label>
+        <name>Team_Adjustment__c</name>
+    </fields>
+    <fields>
+        <help><!-- Commission Type --></help>
+        <label><!-- Type --></label>
+        <name>Type__c</name>
+        <picklistValues>
+            <masterLabel>Commission Adjustment</masterLabel>
+            <translation><!-- Commission Adjustment --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Gross Profit</masterLabel>
+            <translation><!-- Gross Profit --></translation>
+        </picklistValues>
+    </fields>
+    <layouts>
+        <layout>Commission Adjustment Detail Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

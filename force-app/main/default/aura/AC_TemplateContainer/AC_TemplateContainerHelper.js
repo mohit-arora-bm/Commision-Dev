@@ -1,28 +1,22 @@
 ({
     createTemplateConfig: function(component, event, helper, componentName, recordId) { 
-        var self = this;
-        var action = component.get("c.getComponentDisability");
+       helper.showSpinner(component);
+        var dataService = component.find('dataService');
+        var action = component.get("c.getComponentDisability"); 
         action.setParams({ objectAPIName : 'agileComp__AC_Templates_Config__c' });
-        action.setCallback(this, function(response) {
-            var state = response.getState();
-            if (state === "SUCCESS") {
-                component.set("v.isComponentDisabled", response.getReturnValue());
-                //component.set("v.isComponentDisabled", true);
-                self.createTemplateConfigHelper(component, event, helper, componentName, recordId);
+        dataService.fetch(action).then($A.getCallback(function (response) {
+            component.set("v.isComponentDisabled", response.isComponentDisabled);
+            component.set("v.generalConfig", response.generalConfig);
+            component.set("v.hasCofigPermission", response.hasCofigPermission);
+            if (response.generalConfig) {
+                helper.createTemplateConfigHelper(component, event, helper, componentName, recordId);
             }
-            else if (state === "INCOMPLETE") {
-                // do something
-            }
-            else if (state === "ERROR") {
-                var errors = response.getError();
-                if (errors) {
-                    if (errors[0] && errors[0].message) {
-                    }
-                } else {
-                }
-            }
+            helper.hideSpinner(component);
+
+        })).catch(function (error) {
+            helper.hideSpinner(component);
+            helper.logError(component, 'createTemplateConfig', error.name, error.message);
         });
-        $A.enqueueAction(action);
        
     },
     
@@ -31,12 +25,14 @@
         $A.createComponent(componentName,{
             'recordId' : recordId,
             'templateNames' : component.get('v.templateNames'),
-            "isScheduled" : component.getReference('v.isScheduled')
+            "isScheduled" : component.getReference('v.isScheduled'),
+            "hasBatch" : component.getReference('v.hasBatch')
                 },
             function(compBody, status, errorMessage) {
                 console.log(status);
                 console.log(errorMessage);
-                if (status === "SUCCESS") {
+                if (status === "SUCCESS" && component.find('templateConfigComp')) { 
+                    console.log(component.find('templateConfigComp'));
                     component.find('templateConfigComp').set("v.body", compBody);
                 } else if (status === "INCOMPLETE") {
                     //
@@ -45,5 +41,15 @@
                 }
             }
         );
-    }
-    })
+    },
+    logError : function(component, methodName, errorName, errorMessage) {
+        console.log('AC_TemplateContainer -> ' + methodName + errorName, errorMessage);
+		component.find('dataService').logException('AC_TemplateContainer -> ' + methodName + errorName, errorMessage);
+	},
+	hideSpinner : function( component ) {
+        $A.util.addClass(component.find("Spinner"), "slds-hide");
+    },
+    showSpinner : function( component ) {
+        $A.util.removeClass(component.find("Spinner"), "slds-hide");
+	},
+})

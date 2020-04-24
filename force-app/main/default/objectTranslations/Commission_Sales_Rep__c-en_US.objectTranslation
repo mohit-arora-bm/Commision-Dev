@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Commission Sales Rep</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Commission Sales Reps</value>
+    </caseValues>
+    <fields>
+        <label><!-- Commission Team --></label>
+        <name>Commission_Team__c</name>
+        <relationshipLabel><!-- Commission Sales Reps --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- Select the sales rep to roll all input to.  The Individual is thus cancelled out and their values roll to another rep.  The values stay on the team and this user Must be on the same team! --></help>
+        <label><!-- Roll Input Base to Rep --></label>
+        <name>Roll_Base_Input_To_Rep__c</name>
+        <relationshipLabel><!-- Commission Sales Reps --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- Sales Rep Available to Attain Commission --></help>
+        <label><!-- Sales Rep --></label>
+        <name>Sales_Rep__c</name>
+        <relationshipLabel><!-- Commission Sales Reps --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Is Active --></label>
+        <name>isActive__c</name>
+    </fields>
+    <layouts>
+        <layout>Commission Sales Rep Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <quickActions>
+        <label><!-- Get PDF --></label>
+        <name>Get_PDF</name>
+    </quickActions>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>
